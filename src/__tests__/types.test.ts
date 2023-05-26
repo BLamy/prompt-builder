@@ -95,6 +95,6 @@ type testExtractArgs = [
 ];
 
 // Required to have atleast 1 test
-it('should pass', () => {
+it("should pass", () => {
   expect(true).toBe(true);
 });

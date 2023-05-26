@@ -1,9 +1,11 @@
 import { PromptBuilder } from "./PromptBuilder";
-import { ChatCompletionRequestMessage } from "openai"
+import { ChatCompletionRequestMessage } from "openai";
 import { ExtractArgs, ExtractChatArgs, ReplaceChatArgs } from "./types";
 
 export class Chat<
-  TMessages extends [] | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
+  TMessages extends
+    | []
+    | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
   const TArgs extends ExtractChatArgs<TMessages, {}>
 > {
   constructor(protected messages: TMessages, protected args: TArgs) {}
