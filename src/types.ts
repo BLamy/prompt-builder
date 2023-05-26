@@ -1,3 +1,5 @@
+import { ChatCompletionRequestMessage } from 'openai';
+
 export type ReplaceArgs<
   TPromptTemplate extends string,
   TArgs extends Record<string, any>
@@ -22,3 +24,22 @@ export type ExtractArgs<
     ? TSTypeValidator[K]
     : any;
 };
+
+export type ReplaceChatArgs<TMessages, TArgs extends Record<string, any>> = {
+  [K in keyof TMessages]: TMessages[K] extends ChatCompletionRequestMessage
+    ? {
+        role: TMessages[K]["role"];
+        content: ReplaceArgs<TMessages[K]["content"], TArgs>;
+      }
+    : never;
+};
+
+export type ExtractChatArgs<
+  TMessages,
+  TSTypeValidator = ExtractChatArgs<TMessages, {}>
+> = ExtractArgs<
+  TMessages extends ChatCompletionRequestMessage[]
+    ? TMessages[number]["content"]
+    : never,
+  TSTypeValidator
+>;
