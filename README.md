@@ -7,13 +7,13 @@ This library leverages TypeScript's string literal types to perform compile-time
 ## Installation
 
 ```bash
-npm install --save promptbuilder
+npm install --save prompt-builder
 ```
 
 Or using yarn:
 
 ```bash
-yarn add promptbuilder
+yarn add prompt-builder
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ yarn add promptbuilder
 Here's a basic usage of the library:
 
 ```ts
-import { PromptBuilder } from 'promptbuilder';
+import { PromptBuilder } from 'prompt-builder';
 
 const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
 
@@ -41,7 +41,7 @@ The library is primarily comprised of two main classes, `Prompt` and `PromptBuil
 The `Prompt` class is responsible for replacing template placeholders with supplied arguments.
 
 ```ts
-import { Prompt } from 'promptbuilder';
+import { Prompt } from 'prompt-builder';
 
 const prompt = new Prompt("Tell me a {{jokeType}} joke", {
   jokeType: "funny",
