@@ -57,22 +57,22 @@ describe("ChatBuilder", () => {
       .user(`Tell me a {{jokeType}} joke`)
       .addInputValidation<{
         jokeType: "funny" | "silly";
-      }>()
-      const chat = chatBuilder.build({
+      }>();
+    const chat = chatBuilder.build({
       //     ^?
-        jokeType: "funny",
-      });
+      jokeType: "funny",
+    });
 
-      const expectedContent = "Tell me a funny joke";
-      type test = Expect<
-        Equal<typeof chat, [{ role: "user"; content: typeof expectedContent }]>
-      >;
-      assert.deepEqual(chat, [{ role: "user", content: expectedContent }]);
-      
-      chatBuilder.build({
-        // @ts-expect-error
-        jokeType: "asdf",
-      });
+    const expectedContent = "Tell me a funny joke";
+    type test = Expect<
+      Equal<typeof chat, [{ role: "user"; content: typeof expectedContent }]>
+    >;
+    assert.deepEqual(chat, [{ role: "user", content: expectedContent }]);
+
+    chatBuilder.build({
+      // @ts-expect-error
+      jokeType: "asdf",
+    });
   });
 
   it("should allow adding zod validation after chaining", () => {
@@ -306,32 +306,31 @@ describe("ChatBuilder", () => {
       me: "zxcv",
     });
   });
-  it("should be able to validate props for a ZodPromptBuilder", () => { 
-      const chatBuilder = new ChatBuilder([
-        // ^?
-        system(`You are a joke generator you only tell {{jokeType}} jokes`),
-        user(`Tell {{me}} {{num}} Jokes.`),
-        assistant(`Probably a bad joke a about atoms`),
-      ]).addZodInputValidation(
-        z.object({
-          jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-          me: z.union([z.literal("Brett"), z.literal("Liana")]),
-          num: z.number(),
-        })
-      );
-      const args = {
-        jokeType: "funny",
-        num: 1,
-        me: "Brett",
-      };
-      // @ts-expect-error
-      chatBuilder.build(args);
+  it("should be able to validate props for a ZodPromptBuilder", () => {
+    const chatBuilder = new ChatBuilder([
+      // ^?
+      system(`You are a joke generator you only tell {{jokeType}} jokes`),
+      user(`Tell {{me}} {{num}} Jokes.`),
+      assistant(`Probably a bad joke a about atoms`),
+    ]).addZodInputValidation(
+      z.object({
+        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+        me: z.union([z.literal("Brett"), z.literal("Liana")]),
+        num: z.number(),
+      })
+    );
+    const args = {
+      jokeType: "funny",
+      num: 1,
+      me: "Brett",
+    };
+    // @ts-expect-error
+    chatBuilder.build(args);
 
-      if (chatBuilder.validate(args)) {
-        chatBuilder.build(args);
-      } else {
-        throw new Error("Invalid args");
-      }
+    if (chatBuilder.validate(args)) {
+      chatBuilder.build(args);
+    } else {
+      throw new Error("Invalid args");
+    }
   });
 });
-

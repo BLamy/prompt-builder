@@ -1,4 +1,4 @@
-import { ChatCompletionRequestMessage } from 'openai';
+import { ChatCompletionRequestMessage } from "openai";
 
 export type ReplaceArgs<
   TPromptTemplate extends string,

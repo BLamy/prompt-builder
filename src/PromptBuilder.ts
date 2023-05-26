@@ -17,13 +17,18 @@ export class PromptBuilder<
   addZodInputValidation<TZodSchema extends ZodType<TExpectedInput>>(
     schema: TZodSchema
   ): PromptBuilder<TPromptTemplate, z.infer<TZodSchema>> {
-    return new (class extends PromptBuilder<TPromptTemplate, z.infer<TZodSchema>> {
-      validate(args: Record<string, any>): args is z.infer<TZodSchema>{
+    return new (class extends PromptBuilder<
+      TPromptTemplate,
+      z.infer<TZodSchema>
+    > {
+      validate(args: Record<string, any>): args is z.infer<TZodSchema> {
         schema.parse(args);
         return true;
       }
-      
-      build<const TSuppliedInputArgs extends z.infer<TZodSchema>>(args: TSuppliedInputArgs) {
+
+      build<const TSuppliedInputArgs extends z.infer<TZodSchema>>(
+        args: TSuppliedInputArgs
+      ) {
         schema.parse(args);
         return super.build(args);
       }
@@ -38,7 +43,9 @@ export class PromptBuilder<
   build<const TSuppliedInputArgs extends TExpectedInput>(
     args: TSuppliedInputArgs
   ) {
-    return new Prompt<TPromptTemplate, TSuppliedInputArgs>(this.template, args)
-      .toString();
+    return new Prompt<TPromptTemplate, TSuppliedInputArgs>(
+      this.template,
+      args
+    ).toString();
   }
 }

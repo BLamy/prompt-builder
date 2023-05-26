@@ -6,6 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "prepublish": "tsc",
+    "prettier": "npx prettier --write src",
     "test": "jest"
   },
   "keywords": [],
