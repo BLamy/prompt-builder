@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepublish": "tsc",
+    "prepublish": "rm -rf dist && tsc",
     "prettier": "npx prettier --write src",
     "test": "jest"
   },
