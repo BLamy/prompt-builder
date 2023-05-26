@@ -10,6 +10,13 @@ The Prompt Builder also supports input validation using basic TypeScript types a
 
 #### TypeScript Validation
 
+{% tabs %}
+{% tab title="Demo" %}
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Code" %}
+{% code lineNumbers="true" %}
 ```ts
 import { PromptBuilder } from 'prompt-builder';
 
@@ -31,11 +38,20 @@ validatedPromptBuilder.build({
   jokeType: "bad", // TypeScript error here!
 });
 ```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
 
 In the above example, we're defining the `jokeType` argument to be either "funny" or "silly". Any other value will result in a TypeScript error.
 
 #### Zod Validation
 
+{% tabs %}
+{% tab title="Demo" %}
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Code" %}
 ```ts
 import { z } from 'zod';
 import { PromptBuilder } from 'prompt-builder';
@@ -58,5 +74,7 @@ validatedPromptBuilder.build({
   jokeType: "bad", // Zod validation error here!
 });
 ```
+{% endtab %}
+{% endtabs %}
 
 In the above example, we're defining a Zod schema for our input. This gives us more flexibility and power in terms of validation rules and error handling.

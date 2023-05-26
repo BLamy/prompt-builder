@@ -8,7 +8,7 @@ The `Prompt` class is responsible for replacing template placeholders with suppl
 
 {% tabs %}
 {% tab title="Demo" %}
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShc8C+cBmaRwDkY+YMAtAEYCuwANgCYCmUhA3AFBcDGEAdgGd4JdGTgBeOHyYB3FKRgAKAEQAVJnTpwQTOAENECAFYQA1k1UBPME0zYT55QBpEHOO48B6T3AB6Afjc4BwtrJgAuOGUcaj4+S2cOTABKADoYCABlGChgPgBzRWTODl5BCDomVLoIQpEMYrggA">TS Playground</a></p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShc8C+cBmaRwDkY+YMAtAEYCuwANgCYCmUhA3AFBcDGEAdgGd4JdGTgBeOHyYB3FKRgAKAEQAVJnTpwQTOAENECAFYQA1k1UBPME0zYT55QBpEHOO48B6T3AB6Afjc4BwtrJgAuOGUcaj4+S2cOTABKADoYCABlGChgPgBzRWTODl5BCDomVLoIQpEMYrggA">TS Playground</a></p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Code" %}
