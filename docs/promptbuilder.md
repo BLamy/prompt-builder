@@ -1,8 +1,41 @@
+---
+description: API Docs for PromptBuilder class
+---
+
 # PromptBuilder
 
-#### `PromptBuilder`
+`PromptBuilder`
 
 The `PromptBuilder` class allows you to define your template and then `build()` your prompt using the supplied data. Note that the result of the `build()` function is still a string literal, meaning you can later write a function that expects certain string literals, making it easy to split out which prompts can go to what providers at a type level.
+
+
+
+### Basic Usage
+
+{% tabs %}
+{% tab title="Demo" %}
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShcMBCBXYAbAEwFMo4BfOAMzRDgHIwawYBaAI10JLoG4AoPgGMIAOwDO8RumY58xUgF44IogHcUTLJ3kAKAEQAVInjxwQROAENECAFYQA1kQMBPMETIV7TvQEp+QqIScFIYcEqhMtokAHQccjoIfHBw3s5uRABccHqU2CIiLnoANHxk-gLC4hB4RDF4EADmOpEw-nAA9B05RiZmFtZ5BS6pjkR6Al1wBgAWFpQ1DarAIo1wqhDYhHCClthiA9MAynAAbpZ4wASWMMCicCRoUHytslxQcdqJyXBslgTZXL5QolTrdAwnACiUCev2w8BEEDgUHyt3MZX8QA">TS Playground Example</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Code" %}
+```typescript
+import { PromptBuilder } from 'prompt-builder';
+
+const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
+
+const prompt = promptBuilder.build({
+  jokeType: "funny",
+});
+
+console.log(prompt); // "Tell me a funny joke"
+
+// The following would cause a TS validation error
+promptBuilder.build({
+  bad: "funny", // TS Error but no runtime
+});
+```
+{% endtab %}
+{% endtabs %}
 
 ### Input Validation
 
