@@ -85,9 +85,11 @@ describe("PromptBuilder with input validation", () => {
 describe("PromptBuilder with input validation using Zod", () => {
   it("should be able to build a basic prompt", () => {
     const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
-    const validatedPromptBuilder = promptBuilder.addZodInputValidation(z.object({
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation(
+      z.object({
         jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-    }));
+      })
+    );
     const prompt = validatedPromptBuilder.build({
       jokeType: "funny",
     });
@@ -121,12 +123,14 @@ describe("PromptBuilder with input validation using Zod", () => {
     const promptBuilder = new PromptBuilder(
       "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"
     );
-    const validatedPromptBuilder = promptBuilder.addZodInputValidation(z.object({
-      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-      me: z.union([z.literal("Brett"), z.literal("Liana")]),
-      num: z.number(),
-      bool: z.boolean(),
-    }));
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation(
+      z.object({
+        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+        me: z.union([z.literal("Brett"), z.literal("Liana")]),
+        num: z.number(),
+        bool: z.boolean(),
+      })
+    );
     const prompt = validatedPromptBuilder.build({
       jokeType: "funny",
       me: "Brett",
@@ -167,34 +171,35 @@ describe("PromptBuilder with input validation using Zod", () => {
     );
   });
 
-  it("should be able to validate props for a ZodPromptBuilder", () => { 
-    const promptBuilder = new PromptBuilder(
-      "Tell me a {{jokeType}} joke"
-      );
-      const validatedPromptBuilder = promptBuilder.addZodInputValidation(z.object({
+  it("should be able to validate props for a ZodPromptBuilder", () => {
+    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation(
+      z.object({
         jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-      }));
-      const args = {
-        jokeType: "funny",
-      };
-      if (validatedPromptBuilder.isValidArgs(args)) {
-        const prompt = validatedPromptBuilder.build(args);
-        type test = Expect<Equal<typeof prompt, "Tell me a funny joke" | "Tell me a silly joke">>;
-        assert.strictEqual(prompt, "Tell me a funny joke");
-        return;
-      }
-      throw new Error("Invalid args");
+      })
+    );
+    const args = {
+      jokeType: "funny",
+    };
+    if (validatedPromptBuilder.validate(args)) {
+      const prompt = validatedPromptBuilder.build(args);
+      type test = Expect<
+        Equal<typeof prompt, "Tell me a funny joke" | "Tell me a silly joke">
+      >;
+      assert.strictEqual(prompt, "Tell me a funny joke");
+      return;
+    }
+    throw new Error("Invalid args");
   });
 
   it("should fail to validate props if no runtime zod validation provided", () => {
-    const promptBuilder = new PromptBuilder(
-      "Tell me a {{jokeType}} joke"
-      );
-      const args = {
-        jokeType: "any",
-      };
-      if (promptBuilder.isValidArgs(args)) { // CANNOT validate at runtime if only ts types provided
-        throw new Error("Invalid args");
-      }
-  })
+    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
+    const args = {
+      jokeType: "any",
+    };
+    if (promptBuilder.validate(args)) {
+      // CANNOT validate at runtime if only ts types provided
+      throw new Error("Invalid args");
+    }
+  });
 });

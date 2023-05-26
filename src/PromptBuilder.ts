@@ -18,7 +18,7 @@ export class PromptBuilder<
     schema: TZodSchema
   ): PromptBuilder<TPromptTemplate, z.infer<TZodSchema>> {
     return new (class extends PromptBuilder<TPromptTemplate, z.infer<TZodSchema>> {
-      isValidArgs(args: Record<string, any>): args is z.infer<TZodSchema>{
+      validate(args: Record<string, any>): args is z.infer<TZodSchema>{
         schema.parse(args);
         return true;
       }
@@ -30,7 +30,7 @@ export class PromptBuilder<
     })(this.template);
   }
 
-  isValidArgs(args: Record<string, any>): args is TExpectedInput {
+  validate(args: Record<string, any>): args is TExpectedInput {
     // Validate can only be called on a PromptBuilder with zod input validation
     return false;
   }
