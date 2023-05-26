@@ -111,3 +111,34 @@ validatedPromptBuilder.build({
 {% endtabs %}
 
 In the above example, we're defining a Zod schema for our input. This gives us more flexibility and power in terms of validation rules and error handling.
+
+#### isValidArgs - TS helper
+
+{% tabs %}
+{% tab title="Demo" %}
+<figure><img src=".gitbook/assets/isValidArgs helper (1).gif" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgLzgXzgMyhEcDkyEAJvgNwBQoksicACjuDAEICuwANsQKZTpYmBMEzAwAtACMO3PuQoUAxhAB2AZ3gjcY9l178AvHBU8A7g1GsZ+gBQAiACo9OnOCB5wAhogQArCADWPA4AnmA8aBj+QXYAlAB0nsTEAFokAJIqYGwwAGqenMDEnjDAqjbI8RCSvjyKMDYIFHBw0cFhPABcKPFsKmUqNgDalYUwfAX2mH0qIXEAND1jE5z2alycc7EAurHzFGixsZRKqhpeUADmanBGTS1toeHddtMqs3b7aCfAmHA2WmYulkUHiwDU+UKxAAglc1DZPHCjohmi04Mp1JpLLc4ICdNY+PFpHoEUjKGj0WcIJwePFOBBLgDLMcDgoKEA">TS Playground Example</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Code" %}
+{% code lineNumbers="true" %}
+```typescript
+import { z } from 'zod';
+import { PromptBuilder } from 'prompt-builder';
+
+const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke").addZodInputValidation(z.object({
+  jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+}));
+
+const args = {
+  jokeType: "funny",
+};
+
+if (promptBuilder.isValidArgs(args)) {
+    const prompt = promptBuilder.build(args);
+    console.log(prompt);
+}
+
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
