@@ -1,4 +1,10 @@
-import { ExtractArgs, ExtractArgsAsTuple, ReplaceArgs } from "../types";
+import {
+  ExtractArgs,
+  ExtractArgsAsTuple,
+  ReplaceArgs,
+  ExtractChatArgs,
+  ReplaceChatArgs,
+} from "../types";
 
 export type Expect<T extends true> = T;
 export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
@@ -90,6 +96,109 @@ type testExtractArgs = [
         { jokeType: string; num: number; joke: string }
       >,
       { jokeType: string; num: number; joke: string }
+    >
+  >
+];
+
+type testExtractChatArgs = [
+  Expect<
+    Equal<
+      ExtractChatArgs<
+        [
+          //    ^?
+          { role: "system"; content: "foo {{bar}} test" },
+          { role: "user"; content: "foo {{buzz}} test" }
+        ]
+      >,
+      {
+        bar: any;
+        buzz: any;
+      }
+    >
+  >,
+  Expect<
+    Equal<
+      ExtractChatArgs<
+        [
+          //    ^?
+          { role: "system"; content: "foo {{bar}} test" },
+          { role: "user"; content: "foo {{buzz}} test" }
+        ],
+        {
+          bar: "fizz" | "buzz";
+          buzz: number;
+        }
+      >,
+      {
+        bar: "fizz" | "buzz";
+        buzz: number;
+      }
+    >
+  >,
+  Expect<
+    Equal<
+      ExtractChatArgs<
+        [
+          //    ^?
+          { role: "system"; content: "foo {{bar}} test" },
+          { role: "user"; content: "foo {{buzz}} test" }
+        ],
+        {
+          bar: "fizz" | "buzz";
+        }
+      >,
+      {
+        bar: "fizz" | "buzz";
+        buzz: any;
+      }
+    >
+  >
+];
+
+type testReplaceChatArgs = [
+  Expect<
+    Equal<
+      ReplaceChatArgs<
+        Array<{
+          role: "system";
+          content: "Tell {{person}} a {{jokeType}} joke";
+        }>,
+        { jokeType: "funny"; person: "Brett" }
+      >,
+      Array<{ role: "system"; content: "Tell Brett a funny joke" }>
+    >
+  >,
+  Expect<
+    Equal<
+      ReplaceChatArgs<
+        Array<{
+          role: "system";
+          content: "Tell {{person}} a {{jokeType}} joke";
+        }>,
+        { jokeType: "funny" | "dad"; person: "Brett" }
+      >,
+      Array<{
+        role: "system";
+        content: "Tell Brett a funny joke" | "Tell Brett a dad joke";
+      }>
+    >
+  >,
+  Expect<
+    Equal<
+      ReplaceChatArgs<
+        [
+          { role: "system"; content: "foo {{bar}} test" },
+          { role: "user"; content: "foo {{buzz}} test" }
+        ],
+        {
+          bar: "test";
+          buzz: "test2" | "test3";
+        }
+      >,
+      [
+        { role: "system"; content: "foo test test" },
+        { role: "user"; content: "foo test2 test" | "foo test3 test" }
+      ]
     >
   >
 ];

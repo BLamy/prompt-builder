@@ -1,6 +1,5 @@
 import { Expect, Equal } from "./types.test";
 import { system, user, assistant, dedent } from "../ChatHelpers";
-import { type } from "os";
 
 describe("dedent", () => {
   it("When called as function string literal is maintained but type literal is not dedented like the actual value", () => {
