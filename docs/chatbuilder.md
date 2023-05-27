@@ -4,8 +4,6 @@ description: TODO WIP
 
 # ChatBuilder
 
-Absolutely, I will provide detailed examples for each method with explanation in the same style.
-
 ### `ChatBuilder` Class
 
 This is the main class of the `prompt-builder` library. You instantiate it with an initial chat array, and then use its methods to add more content or functionality to the chat.
