@@ -7,7 +7,11 @@ description: API Docs for Prompt class
 The `Prompt` class is responsible for replacing template placeholders with supplied arguments.
 
 {% tabs %}
-{% tab title="Example" %}
+{% tab title="Demo" %}
+{% embed url="https://stackblitz.com/edit/node-2t8kve?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" %}
+{% endtab %}
+
+{% tab title="Screenshot" %}
 <figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShc8C+cBmaRwDkY+YMAtAEYCuwANgCYCmUhA3AFBcDGEAdgGd4JdGTgBeOHyYB3FKRgAKAEQAVJnTpwQTOAENECAFYQA1k1UBPME0zYT55QBpEHOO48B6T3AB6Afjc4BwtrJgAuOGUcaj4+S2cOTABKADoYCABlGChgPgBzRWTODl5BCDomVLoIQpEMYrggA">TS Playground</a></p></figcaption></figure>
 {% endtab %}
 
