@@ -12,9 +12,34 @@ The `PromptBuilder` class allows you to define your template and then `build()` 
 
 ### Basic Usage
 
+
+
+{% tabs %}
+{% tab title="Screenshot" %}
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShcMBCBXYAbAEwFMo4BfOAMzRDgHIwawYBaAI10JLoG4AoPgGMIAOwDO8RumY58xUgF44IogHcUTLJ3kAKAEQAVInjxwQROAENECAFYQA1kQMBPMETIV7TvQEp+QqIScFIYcEqhMtokAHQccjoIfHBw3s5uRABccHqU2CIiLnoANHxk-gLC4hB4RDF4EADmOpEw-nAA9B05RiZmFtZ5BS6pjkR6Al1wBgAWFpQ1DarAIo1wqhDYhHCClthiA9MAynAAbpZ4wASWMMCicCRoUHytslxQcdqJyXBslgTZXL5QolTrdAwnACiUCev2w8BEEDgUHyt3MZX8QA">TS Playground</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Demo" %}
 {% embed url="https://stackblitz.com/edit/node-uhvf9x?ctl=0&file=index.ts&hideExplorer=1&terminal=e1&view=editor&embed=1" fullWidth="true" %}
 Note Args passed into `build` must be constant
 {% endembed %}
+{% endtab %}
+
+{% tab title="Code" %}
+```typescript
+import { PromptBuilder } from 'prompt-builder';
+const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
+const prompt = promptBuilder.build({
+  jokeType: "funny",
+});
+console.log(prompt); // "Tell me a funny joke"
+// The following would cause a TS validation error
+promptBuilder.build({
+  bad: "funny", // TS Error but no runtime
+});
+```
+{% endtab %}
+{% endtabs %}
 
 ### Input Validation
 
@@ -22,7 +47,41 @@ The Prompt Builder also supports input validation using basic TypeScript types a
 
 #### TypeScript Validation
 
+{% tabs %}
+{% tab title="Screenshot" %}
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Demo" %}
 {% embed url="https://stackblitz.com/edit/node-w3j5wo?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" fullWidth="true" %}
+{% endtab %}
+
+{% tab title="Code" %}
+```typescript
+import { PromptBuilder } from 'prompt-builder';
+
+const promptBuilder = new PromptBuilder('Tell me a {{jokeType}} joke');
+
+// Define allowed types for inputs
+const validatedPromptBuilder = promptBuilder.addInputValidation<{
+  jokeType: 'funny' | 'silly';
+}>();
+
+const prompt = validatedPromptBuilder.build({
+  jokeType: 'funny',
+});
+
+console.log(prompt); // "Tell me a funny joke"
+
+// The following would cause a TypeScript error
+validatedPromptBuilder.build({
+  // @ts-expect-error
+  jokeType: 'bad', // TypeScript error here!
+});
+
+```
+{% endtab %}
+{% endtabs %}
 
 In the above example, we're defining the `jokeType` argument to be either "funny" or "silly". Any other value will result in a TypeScript error.
 
@@ -30,7 +89,7 @@ In the above example, we're defining the `jokeType` argument to be either "funny
 
 {% tabs %}
 {% tab title="Screenshot" %}
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Demo" %}
@@ -72,8 +131,12 @@ In the above example, we're defining a Zod schema for our input. This gives us m
 If zod validation is added to a PromptBuilder then you can use the `validate` type predicate to scope down your types in the event a prompt builder requires a type more narrow than is currently defined.&#x20;
 
 {% tabs %}
-{% tab title="Example" %}
+{% tab title="Screenshot" %}
 <figure><img src=".gitbook/assets/validateArgs (1).gif" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgLzgXzgMyhEcDkyEAJvgNwBQoksicACjuDAEICuwANsQKZTpYmBMEzAwAtACMO3PuQoUAxhAB2AZ3gjcY9l178AvHBU8A7g1GsZ+gBQAiACo9OnOCB5wAhogQArCADWPA4AnmA8aBj+QXYAlAB0nsTEAFokAJIqYGwwAGqenMDEnjDAqjbI8RCSvjyKMDYIFHBw0cFhPABcKPFsKmUqNgDalYUwfAX2mH0qIXEAND1jE5z2alycc7EAurHzFGixsZRKqhpeUADmanBGTS1toeHddtMqs3b7aCfAmHA2WmYulkUHiADcCkUSjwbJ4rmojohmnBlOpNJZbnBATprHx4tI9LD4cdkai1BBODx4pwIJcAZYSWggA">TS Playground Example</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Demo" %}
+{% embed url="https://stackblitz.com/edit/node-pxjn2r?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" %}
 {% endtab %}
 
 {% tab title="Code" %}
