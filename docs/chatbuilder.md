@@ -35,7 +35,7 @@ You can add more prompts to the chat using the `user`, `system`, and `assistant`
 
 Here's an example of how to use these methods:
 
-```ts
+```typescript
 import { ChatBuilder } from "prompt-builder";
 
 const chatBuilder = new ChatBuilder([])
@@ -51,6 +51,28 @@ const chatBuilder = new ChatBuilder([])
     Processing {{jokeType}} joke.
     Please stand by.
   `);
+
+```
+
+Or using helper methods:
+
+```ts
+import { ChatBuilder, user, assistant, system } from "prompt-builder";
+
+const chatBuilder2 = new ChatBuilder([
+  user(`
+    Tell me a {{jokeType}} joke.
+    Make it a good one!
+  `),
+  assistant(`
+    {{jokeType}} joke?
+    I'll do my best!
+  `),
+  system(`
+    Processing {{jokeType}} joke.
+    Please stand by.
+  `),
+]);
 ```
 
 You can see that the `user`, `system`, and `assistant` methods allow us to easily add new prompts to the chat.
