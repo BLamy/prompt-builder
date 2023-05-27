@@ -29,8 +29,12 @@ In the above example, we're defining the `jokeType` argument to be either "funny
 #### Zod Validation
 
 {% tabs %}
-{% tab title="Example" %}
+{% tab title="Screenshot" %}
 <figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
+{% endtab %}
+
+{% tab title="Demo" %}
+{% embed url="https://stackblitz.com/edit/node-w3j5wo?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=1" %}
 {% endtab %}
 
 {% tab title="Code" %}
