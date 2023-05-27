@@ -13,7 +13,7 @@ The `PromptBuilder` class allows you to define your template and then `build()` 
 ### Basic Usage
 
 {% tabs %}
-{% tab title="Demo" %}
+{% tab title="Example" %}
 <figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShcMBCBXYAbAEwFMo4BfOAMzRDgHIwawYBaAI10JLoG4AoPgGMIAOwDO8RumY58xUgF44IogHcUTLJ3kAKAEQAVInjxwQROAENECAFYQA1kQMBPMETIV7TvQEp+QqIScFIYcEqhMtokAHQccjoIfHBw3s5uRABccHqU2CIiLnoANHxk-gLC4hB4RDF4EADmOpEw-nAA9B05RiZmFtZ5BS6pjkR6Al1wBgAWFpQ1DarAIo1wqhDYhHCClthiA9MAynAAbpZ4wASWMMCicCRoUHytslxQcdqJyXBslgTZXL5QolTrdAwnACiUCev2w8BEEDgUHyt3MZX8QA">TS Playground Example</a></p></figcaption></figure>
 {% endtab %}
 
@@ -44,8 +44,8 @@ The Prompt Builder also supports input validation using basic TypeScript types a
 #### TypeScript Validation
 
 {% tabs %}
-{% tab title="Demo" %}
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
+{% tab title="Example" %}
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Code" %}
@@ -80,7 +80,7 @@ In the above example, we're defining the `jokeType` argument to be either "funny
 #### Zod Validation
 
 {% tabs %}
-{% tab title="Demo" %}
+{% tab title="Example" %}
 <figure><img src=".gitbook/assets/image.png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
 {% endtab %}
 
@@ -117,8 +117,8 @@ In the above example, we're defining a Zod schema for our input. This gives us m
 If zod validation is added to a PromptBuilder then you can use the `isValidArgs` type predicate to scope down your types in the event a prompt builder requires a type more narrow than is currently defined.&#x20;
 
 {% tabs %}
-{% tab title="Demo" %}
-<figure><img src=".gitbook/assets/isValidArgs helper (1).gif" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgLzgXzgMyhEcDkyEAJvgNwBQoksicACjuDAEICuwANsQKZTpYmBMEzAwAtACMO3PuQoUAxhAB2AZ3gjcY9l178AvHBU8A7g1GsZ+gBQAiACo9OnOCB5wAhogQArCADWPA4AnmA8aBj+QXYAlAB0nsTEAFokAJIqYGwwAGqenMDEnjDAqjbI8RCSvjyKMDYIFHBw0cFhPABcKPFsKmUqNgDalYUwfAX2mH0qIXEAND1jE5z2alycc7EAurHzFGixsZRKqhpeUADmanBGTS1toeHddtMqs3b7aCfAmHA2WmYulkUHiwDU+UKxAAglc1DZPHCjohmi04Mp1JpLLc4ICdNY+PFpHoEUjKGj0WcIJwePFOBBLgDLMcDgoKEA">TS Playground Example</a></p></figcaption></figure>
+{% tab title="Example" %}
+<figure><img src=".gitbook/assets/validateArgs (1).gif" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgLzgXzgMyhEcDkyEAJvgNwBQoksicACjuDAEICuwANsQKZTpYmBMEzAwAtACMO3PuQoUAxhAB2AZ3gjcY9l178AvHBU8A7g1GsZ+gBQAiACo9OnOCB5wAhogQArCADWPA4AnmA8aBj+QXYAlAB0nsTEAFokAJIqYGwwAGqenMDEnjDAqjbI8RCSvjyKMDYIFHBw0cFhPABcKPFsKmUqNgDalYUwfAX2mH0qIXEAND1jE5z2alycc7EAurHzFGixsZRKqhpeUADmanBGTS1toeHddtMqs3b7aCfAmHA2WmYulkUHiADcCkUSjwbJ4rmojohmnBlOpNJZbnBATprHx4tI9LD4cdkai1BBODx4pwIJcAZYSWggA">TS Playground Example</a></p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Code" %}
@@ -135,9 +135,9 @@ const args = {
   jokeType: "funny",
 };
 
-if (promptBuilder.isValidArgs(args)) {
-    const prompt = promptBuilder.build(args);
-    console.log(prompt);
+if (promptBuilder.validate(args)) {
+  const prompt = promptBuilder.build(args);
+  console.log(prompt);
 }
 
 ```
