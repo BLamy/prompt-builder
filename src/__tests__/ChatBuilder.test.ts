@@ -1,5 +1,4 @@
 import { ZodError, z } from "zod";
-import { Chat } from "../Chat";
 import { ChatBuilder } from "../ChatBuilder";
 import { user, system, assistant } from "../ChatHelpers";
 import { strict as assert } from "node:assert";
@@ -31,7 +30,7 @@ describe("ChatBuilder", () => {
         jokeType: "funny",
         var2: "foo",
         var3: "bar",
-      });
+      } as const);
     const expectedContent = "Tell me a funny joke";
     const expectedContent2 = "foo joke?";
     const expectedContent3 = "joke? bar";
@@ -122,7 +121,7 @@ describe("ChatBuilder", () => {
       // ^?
       user(`Tell me a {{jokeType}} joke`),
     ]).build({
-      jokeType: "funny",
+      jokeType: "funny" as const,
     });
 
     const expectedContent = "Tell me a funny joke";
@@ -142,7 +141,7 @@ describe("ChatBuilder", () => {
     ]).build({
       num: 1,
       me: "Brett",
-    });
+    } as const);
 
     const expectedContent = "Tell Brett 1 Jokes.";
     type test = Expect<
@@ -164,7 +163,7 @@ describe("ChatBuilder", () => {
       jokeType: "funny",
       num: 1,
       me: "Brett",
-    });
+    } as const);
 
     const expectedSystemContent =
       "You are a joke generator you only tell funny jokes";
@@ -206,7 +205,7 @@ describe("ChatBuilder", () => {
       jokeType: "funny",
       num: 1,
       me: "Brett",
-    });
+    } as const);
 
     const expectedSystemContent =
       "You are a joke generator you only tell funny jokes";
@@ -328,7 +327,27 @@ describe("ChatBuilder", () => {
     chatBuilder.build(args);
 
     if (chatBuilder.validate(args)) {
-      chatBuilder.build(args);
+      const chat = chatBuilder.build(args);
+      type test = Expect<
+        Equal<
+          typeof chat,
+          [
+            {
+              role: "system";
+              content:
+                | "You are a joke generator you only tell funny jokes"
+                | "You are a joke generator you only tell silly jokes";
+            },
+            {
+              role: "user";
+              content:
+                | `Tell Brett ${number} Jokes.`
+                | `Tell Liana ${number} Jokes.`;
+            },
+            { role: "assistant"; content: "Probably a bad joke a about atoms" }
+          ]
+        >
+      >;
     } else {
       throw new Error("Invalid args");
     }

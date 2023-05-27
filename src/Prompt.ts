@@ -1,17 +1,20 @@
 import { ExtractArgs, ReplaceArgs } from "./types";
+import { F } from "ts-toolbelt";
 
 export class Prompt<
   TPromptTemplate extends string,
-  const TSuppliedInputArgs extends ExtractArgs<TPromptTemplate, {}>
+  TSuppliedInputArgs extends ExtractArgs<TPromptTemplate, {}>
 > {
   constructor(
     public template: TPromptTemplate,
-    public args: TSuppliedInputArgs
+    public args: F.Narrow<TSuppliedInputArgs>
   ) {}
 
   toString() {
     return Object.keys(this.args).reduce((acc, x) => {
-      return acc.replace(`{{${x}}}`, this.args[x as keyof typeof this.args]);
+      const args = this.args as TSuppliedInputArgs;
+      const key = x as keyof TSuppliedInputArgs;
+      return acc.replace(`{{${x}}}`, args[key] as string);
     }, this.template) as ReplaceArgs<TPromptTemplate, TSuppliedInputArgs>;
   }
 }

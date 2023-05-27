@@ -1,22 +1,26 @@
 import { PromptBuilder } from "./PromptBuilder";
 import { ChatCompletionRequestMessage } from "openai";
 import { ExtractArgs, ExtractChatArgs, ReplaceChatArgs } from "./types";
+import { F } from "ts-toolbelt";
 
 export class Chat<
   TMessages extends
     | []
     | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
-  const TArgs extends ExtractChatArgs<TMessages, {}>
+  TSuppliedInputArgs extends ExtractChatArgs<TMessages, {}>
 > {
-  constructor(protected messages: TMessages, protected args: TArgs) {}
+  constructor(
+    public messages: F.Narrow<TMessages>,
+    public args: F.Narrow<TSuppliedInputArgs>
+  ) {}
 
   toArray() {
-    return this.messages.map((m) => ({
+    return (this.messages as any[]).map((m: ChatCompletionRequestMessage) => ({
       role: m.role,
       content: new PromptBuilder(m.content)
-        .addInputValidation<ExtractArgs<typeof m.content, TArgs>>()
+        .addInputValidation<ExtractArgs<typeof m.content, typeof this.args>>()
         .build(this.args),
-    })) as ReplaceChatArgs<TMessages, TArgs>;
+    })) as ReplaceChatArgs<typeof this.messages, typeof this.args>;
   }
 
   toString() {

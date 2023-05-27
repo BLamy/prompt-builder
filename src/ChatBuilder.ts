@@ -3,12 +3,12 @@ import { Chat } from "./Chat";
 import { user, assistant, system } from "./ChatHelpers";
 import { ChatCompletionRequestMessage } from "openai";
 import { ExtractArgs, ExtractChatArgs } from "./types";
-
+import { F } from "ts-toolbelt";
 export class ChatBuilder<
   TMessages extends
     | []
     | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
-  const TExpectedInput extends ExtractChatArgs<TMessages, any>
+  TExpectedInput extends ExtractChatArgs<TMessages, any>
 > {
   constructor(protected messages: TMessages) {}
 
@@ -22,7 +22,7 @@ export class ChatBuilder<
     str: TUserText
   ): ChatBuilder<
     [...TMessages, { role: "user"; content: TUserText }],
-    TExpectedInput & ExtractArgs<TUserText>
+    F.Narrow<TExpectedInput> & ExtractArgs<TUserText>
   > {
     return new ChatBuilder([...this.messages, user(str)]) as any;
   }
@@ -31,7 +31,7 @@ export class ChatBuilder<
     str: TSystemText
   ): ChatBuilder<
     [...TMessages, { role: "system"; content: TSystemText }],
-    TExpectedInput & ExtractArgs<TSystemText>
+    F.Narrow<TExpectedInput> & ExtractArgs<TSystemText>
   > {
     return new ChatBuilder([...this.messages, system(str)]) as any;
   }
@@ -40,7 +40,7 @@ export class ChatBuilder<
     str: TAssistantText
   ): ChatBuilder<
     [...TMessages, { role: "assistant"; content: TAssistantText }],
-    TExpectedInput & ExtractArgs<TAssistantText>
+    F.Narrow<TExpectedInput> & ExtractArgs<TAssistantText>
   > {
     return new ChatBuilder([...this.messages, assistant(str)]) as any;
   }
@@ -57,8 +57,8 @@ export class ChatBuilder<
         return true;
       }
 
-      build<const TSuppliedInputArgs extends z.infer<TZodSchema>>(
-        args: TSuppliedInputArgs
+      build<TSuppliedInputArgs extends z.infer<TZodSchema>>(
+        args: F.Narrow<TSuppliedInputArgs>
       ) {
         schema.parse(args);
         return super.build(args);
@@ -71,11 +71,11 @@ export class ChatBuilder<
     return false;
   }
 
-  build<const TSuppliedInputArgs extends TExpectedInput>(
-    args: TSuppliedInputArgs
+  build<TSuppliedInputArgs extends TExpectedInput>(
+    args: F.Narrow<TSuppliedInputArgs>
   ) {
     return new Chat<TMessages, TSuppliedInputArgs>(
-      this.messages,
+      this.messages as any,
       args
     ).toArray();
   }
