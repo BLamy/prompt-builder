@@ -1,6 +1,7 @@
 import { z, ZodType } from "zod";
 import { Prompt } from "./Prompt";
 import { ExtractArgs } from "./types";
+import { F } from "ts-toolbelt";
 
 export class PromptBuilder<
   TPromptTemplate extends string,
@@ -26,8 +27,8 @@ export class PromptBuilder<
         return true;
       }
 
-      build<const TSuppliedInputArgs extends z.infer<TZodSchema>>(
-        args: TSuppliedInputArgs
+      build<TSuppliedInputArgs extends z.infer<TZodSchema>>(
+        args: F.Narrow<TSuppliedInputArgs>
       ) {
         schema.parse(args);
         return super.build(args);
@@ -40,8 +41,8 @@ export class PromptBuilder<
     return false;
   }
 
-  build<const TSuppliedInputArgs extends TExpectedInput>(
-    args: TSuppliedInputArgs
+  build<TSuppliedInputArgs extends TExpectedInput>(
+    args: F.Narrow<TSuppliedInputArgs>
   ) {
     return new Prompt<TPromptTemplate, TSuppliedInputArgs>(
       this.template,

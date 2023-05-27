@@ -31,7 +31,7 @@ describe("Chat", () => {
         user(`Tell me a {{jokeType}} joke`),
       ],
       {
-        jokeType: "funny",
+        jokeType: "funny" as const,
       }
     ).toArray();
     const usrMsg = user("Tell me a funny joke");
@@ -52,7 +52,7 @@ describe("Chat", () => {
         jokeType1: "funny",
         var2: "foo",
         var3: "bar",
-      }
+      } as const
     ).toArray();
     const usrMsg = user("Tell me a funny joke");
     const astMsg = assistant("foo joke?");

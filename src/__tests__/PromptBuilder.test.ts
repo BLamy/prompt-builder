@@ -14,7 +14,7 @@ describe("PromptBuilder", () => {
   it("should be able to build a basic prompt", () => {
     const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
     const prompt = promptBuilder.build({
-      jokeType: "funny",
+      jokeType: "funny" as const,
     });
     type test = Expect<Equal<typeof prompt, "Tell me a funny joke">>;
     assert.strictEqual(prompt, "Tell me a funny joke");
@@ -29,7 +29,7 @@ describe("PromptBuilder", () => {
       me: "Brett",
       num: 1,
       bool: true,
-    });
+    } as const);
     type test = Expect<Equal<typeof prompt, "Tell Brett 1 funny true joke">>;
     assert.strictEqual(prompt, "Tell Brett 1 funny true joke");
   });
