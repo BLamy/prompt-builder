@@ -33,7 +33,7 @@ export class PromptBuilder<
         schema.parse(args);
         return super.build(args);
       }
-    })(this.template);
+    })(this.template) as any;
   }
 
   validate(args: Record<string, any>): args is TExpectedInput {
