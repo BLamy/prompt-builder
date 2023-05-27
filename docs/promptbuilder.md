@@ -34,10 +34,11 @@ In the above example, we're defining the `jokeType` argument to be either "funny
 {% endtab %}
 
 {% tab title="Demo" %}
-{% embed url="https://stackblitz.com/edit/node-w3j5wo?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=1" %}
+{% embed url="https://stackblitz.com/edit/node-fidqvy?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" fullWidth="true" %}
 {% endtab %}
 
 {% tab title="Code" %}
+{% code fullWidth="true" %}
 ```ts
 import { z } from 'zod';
 import { PromptBuilder } from 'prompt-builder';
@@ -60,6 +61,7 @@ validatedPromptBuilder.build({
   jokeType: "bad", // Zod validation error here!
 });
 ```
+{% endcode %}
 {% endtab %}
 {% endtabs %}
 
