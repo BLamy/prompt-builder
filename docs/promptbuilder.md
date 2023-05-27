@@ -12,30 +12,9 @@ The `PromptBuilder` class allows you to define your template and then `build()` 
 
 ### Basic Usage
 
-{% tabs %}
-{% tab title="Example" %}
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption><p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgBShcMBCBXYAbAEwFMo4BfOAMzRDgHIwawYBaAI10JLoG4AoPgGMIAOwDO8RumY58xUgF44IogHcUTLJ3kAKAEQAVInjxwQROAENECAFYQA1kQMBPMETIV7TvQEp+QqIScFIYcEqhMtokAHQccjoIfHBw3s5uRABccHqU2CIiLnoANHxk-gLC4hB4RDF4EADmOpEw-nAA9B05RiZmFtZ5BS6pjkR6Al1wBgAWFpQ1DarAIo1wqhDYhHCClthiA9MAynAAbpZ4wASWMMCicCRoUHytslxQcdqJyXBslgTZXL5QolTrdAwnACiUCev2w8BEEDgUHyt3MZX8QA">TS Playground Example</a></p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Code" %}
-```typescript
-import { PromptBuilder } from 'prompt-builder';
-
-const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
-
-const prompt = promptBuilder.build({
-  jokeType: "funny",
-});
-
-console.log(prompt); // "Tell me a funny joke"
-
-// The following would cause a TS validation error
-promptBuilder.build({
-  bad: "funny", // TS Error but no runtime
-});
-```
-{% endtab %}
-{% endtabs %}
+{% embed url="https://stackblitz.com/edit/node-uhvf9x?ctl=0&file=index.ts&hideExplorer=1&terminal=e1&view=editor&embed=1" fullWidth="true" %}
+Note Args passed into `build` must be constant
+{% endembed %}
 
 ### Input Validation
 
@@ -43,37 +22,7 @@ The Prompt Builder also supports input validation using basic TypeScript types a
 
 #### TypeScript Validation
 
-{% tabs %}
-{% tab title="Example" %}
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
-{% endtab %}
-
-{% tab title="Code" %}
-{% code lineNumbers="true" %}
-```ts
-import { PromptBuilder } from 'prompt-builder';
-
-const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
-
-// Define allowed types for inputs
-const validatedPromptBuilder = promptBuilder.addInputValidation<{
-  jokeType: "funny" | "silly";
-}>();
-
-const prompt = validatedPromptBuilder.build({
-  jokeType: "funny",
-});
-
-console.log(prompt); // "Tell me a funny joke"
-
-// The following would cause a TypeScript error
-validatedPromptBuilder.build({
-  jokeType: "bad", // TypeScript error here!
-});
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
+{% embed url="https://stackblitz.com/edit/node-w3j5wo?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" fullWidth="true" %}
 
 In the above example, we're defining the `jokeType` argument to be either "funny" or "silly". Any other value will result in a TypeScript error.
 
@@ -112,9 +61,9 @@ validatedPromptBuilder.build({
 
 In the above example, we're defining a Zod schema for our input. This gives us more flexibility and power in terms of validation rules and error handling.
 
-#### isValidArgs - TS helper
+#### Validate - TS helper
 
-If zod validation is added to a PromptBuilder then you can use the `isValidArgs` type predicate to scope down your types in the event a prompt builder requires a type more narrow than is currently defined.&#x20;
+If zod validation is added to a PromptBuilder then you can use the `validate` type predicate to scope down your types in the event a prompt builder requires a type more narrow than is currently defined.&#x20;
 
 {% tabs %}
 {% tab title="Example" %}
