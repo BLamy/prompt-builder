@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { ChatCompletionRequestMessage } from "openai";
 
 export type ReplaceArgs<
@@ -24,6 +25,12 @@ export type ExtractArgs<
     ? TSTypeValidator[K]
     : any;
 };
+
+export type TypeToZodShape<T> = [T] extends [string | number | boolean]
+  ? z.Schema<T>
+  : {
+      [K in keyof T]: TypeToZodShape<T[K]>;
+    };
 
 export type ReplaceChatArgs<TMessages, TArgs extends Record<string, any>> = {
   [K in keyof TMessages]: TMessages[K] extends ChatCompletionRequestMessage

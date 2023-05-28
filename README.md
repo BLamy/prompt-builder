@@ -93,9 +93,9 @@ import { PromptBuilder } from 'prompt-builder';
 const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
 
 // Define a Zod schema for inputs
-const validatedPromptBuilder = promptBuilder.addZodInputValidation(z.object({
+const validatedPromptBuilder = promptBuilder.addZodInputValidation({
   jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-}));
+});
 
 const prompt = validatedPromptBuilder.build({
   jokeType: "funny",

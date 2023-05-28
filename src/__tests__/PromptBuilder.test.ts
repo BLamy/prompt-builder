@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
-import { PromptBuilder } from "../PromptBuilder";
 import { z, ZodError } from "zod";
+import { PromptBuilder } from "../PromptBuilder";
 import { Equal, Expect } from "./types.test";
 
 describe("PromptBuilder", () => {
@@ -85,11 +85,9 @@ describe("PromptBuilder with input validation", () => {
 describe("PromptBuilder with input validation using Zod", () => {
   it("should be able to build a basic prompt", () => {
     const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
-    const validatedPromptBuilder = promptBuilder.addZodInputValidation(
-      z.object({
-        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-      })
-    );
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+    });
     const prompt = validatedPromptBuilder.build({
       jokeType: "funny",
     });
@@ -123,14 +121,12 @@ describe("PromptBuilder with input validation using Zod", () => {
     const promptBuilder = new PromptBuilder(
       "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"
     );
-    const validatedPromptBuilder = promptBuilder.addZodInputValidation(
-      z.object({
-        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-        me: z.union([z.literal("Brett"), z.literal("Liana")]),
-        num: z.number(),
-        bool: z.boolean(),
-      })
-    );
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+      me: z.union([z.literal("Brett"), z.literal("Liana")]),
+      num: z.number(),
+      bool: z.boolean(),
+    });
     const prompt = validatedPromptBuilder.build({
       jokeType: "funny",
       me: "Brett",
@@ -173,11 +169,9 @@ describe("PromptBuilder with input validation using Zod", () => {
 
   it("should be able to validate props for a ZodPromptBuilder", () => {
     const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
-    const validatedPromptBuilder = promptBuilder.addZodInputValidation(
-      z.object({
-        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-      })
-    );
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+    });
     const args = {
       jokeType: "funny",
     };
