@@ -206,8 +206,26 @@ describe("PromptBuilder with input validation using Zod", () => {
       jokeType: "any",
     };
     if (validatedPromptBuilder.validate(args)) {
+      validatedPromptBuilder.build(args);
       // CANNOT validate at runtime if only ts types provided
       throw new Error("Invalid args");
     }
+    assert.throws(
+      () => {
+        // @ts-expect-error
+        validatedPromptBuilder.build(args);
+      },
+      (error: ZodError) => {
+        const issues = error.issues.reduce(
+          (acc, issue) => ({
+            ...acc,
+            [issue.path[0]]: issue.message,
+          }),
+          {}
+        );
+        assert.deepEqual(issues, { jokeType: "Invalid input" });
+        return true;
+      }
+    );
   });
 });
