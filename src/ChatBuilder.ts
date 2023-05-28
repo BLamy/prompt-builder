@@ -1,16 +1,17 @@
-import { z, ZodType } from "zod";
+import { z } from "zod";
+import { F } from "ts-toolbelt";
+import { ChatCompletionRequestMessage } from "openai";
 import { Chat } from "./Chat";
 import { user, assistant, system } from "./ChatHelpers";
-import { ChatCompletionRequestMessage } from "openai";
-import { ExtractArgs, ExtractChatArgs } from "./types";
-import { F } from "ts-toolbelt";
+import { ExtractArgs, ExtractChatArgs, TypeToZodShape } from "./types";
+
 export class ChatBuilder<
   TMessages extends
     | []
     | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
   TExpectedInput extends ExtractChatArgs<TMessages, any>
 > {
-  constructor(protected messages: TMessages) {}
+  constructor(public messages: TMessages) {}
 
   addInputValidation<
     TSTypeValidator extends ExtractChatArgs<TMessages, TSTypeValidator>
@@ -45,22 +46,20 @@ export class ChatBuilder<
     return new ChatBuilder([...this.messages, assistant(str)]) as any;
   }
 
-  addZodInputValidation<TZodSchema extends ZodType<TExpectedInput>>(
-    schema: TZodSchema
-  ): ChatBuilder<TMessages, z.infer<TZodSchema>> {
-    return new (class ZodChatBuilder extends ChatBuilder<
-      TMessages,
-      z.infer<TZodSchema>
-    > {
-      validate(args: Record<string, any>): args is z.infer<TZodSchema> {
-        schema.parse(args);
+  addZodInputValidation<TShape extends TExpectedInput>(
+    shape: TypeToZodShape<TShape>
+  ) {
+    const zodValidator = z.object(shape as any);
+    return new (class extends ChatBuilder<TMessages, TShape> {
+      validate(args: Record<string, any>): args is TShape {
+        zodValidator.parse(args);
         return true;
       }
 
-      build<TSuppliedInputArgs extends z.infer<TZodSchema>>(
+      build<TSuppliedInputArgs extends TShape>(
         args: F.Narrow<TSuppliedInputArgs>
       ) {
-        schema.parse(args);
+        zodValidator.parse(args);
         return super.build(args);
       }
     })(this.messages);

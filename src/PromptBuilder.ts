@@ -1,13 +1,13 @@
-import { z, ZodType } from "zod";
-import { Prompt } from "./Prompt";
-import { ExtractArgs } from "./types";
+import { z } from "zod";
 import { F } from "ts-toolbelt";
+import { Prompt } from "./Prompt";
+import { ExtractArgs, TypeToZodShape } from "./types";
 
 export class PromptBuilder<
   TPromptTemplate extends string,
   TExpectedInput extends ExtractArgs<TPromptTemplate, {}>
 > {
-  constructor(protected template: TPromptTemplate) {}
+  constructor(public template: TPromptTemplate) {}
 
   addInputValidation<
     TSTypeValidator extends ExtractArgs<TPromptTemplate, TSTypeValidator>
@@ -15,25 +15,23 @@ export class PromptBuilder<
     return new PromptBuilder(this.template) as any;
   }
 
-  addZodInputValidation<TZodSchema extends ZodType<TExpectedInput>>(
-    schema: TZodSchema
-  ): PromptBuilder<TPromptTemplate, z.infer<TZodSchema>> {
-    return new (class extends PromptBuilder<
-      TPromptTemplate,
-      z.infer<TZodSchema>
-    > {
-      validate(args: Record<string, any>): args is z.infer<TZodSchema> {
-        schema.parse(args);
+  addZodInputValidation<TShape extends TExpectedInput>(
+    shape: TypeToZodShape<TShape>
+  ) {
+    const zodValidator = z.object(shape as any);
+    return new (class extends PromptBuilder<TPromptTemplate, TShape> {
+      validate(args: Record<string, any>): args is TShape {
+        zodValidator.parse(args);
         return true;
       }
 
-      build<TSuppliedInputArgs extends z.infer<TZodSchema>>(
+      build<TSuppliedInputArgs extends TShape>(
         args: F.Narrow<TSuppliedInputArgs>
       ) {
-        schema.parse(args);
-        return super.build(args);
+        zodValidator.parse(args);
+        return new Prompt(this.template, args).toString();
       }
-    })(this.template) as any;
+    })(this.template);
   }
 
   validate(args: Record<string, any>): args is TExpectedInput {
