@@ -196,4 +196,18 @@ describe("PromptBuilder with input validation using Zod", () => {
       throw new Error("Invalid args");
     }
   });
+
+  it("validate props should fail if invalid args provided", () => {
+    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
+    const validatedPromptBuilder = promptBuilder.addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+    });
+    const args = {
+      jokeType: "any",
+    };
+    if (validatedPromptBuilder.validate(args)) {
+      // CANNOT validate at runtime if only ts types provided
+      throw new Error("Invalid args");
+    }
+  });
 });

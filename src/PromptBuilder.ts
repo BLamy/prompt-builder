@@ -21,8 +21,7 @@ export class PromptBuilder<
     const zodValidator = z.object(shape as any);
     return new (class extends PromptBuilder<TPromptTemplate, TShape> {
       validate(args: Record<string, any>): args is TShape {
-        zodValidator.parse(args);
-        return true;
+        return zodValidator.safeParse(args).success;
       }
 
       build<TSuppliedInputArgs extends TShape>(

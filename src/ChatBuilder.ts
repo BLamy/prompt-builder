@@ -52,8 +52,7 @@ export class ChatBuilder<
     const zodValidator = z.object(shape as any);
     return new (class extends ChatBuilder<TMessages, TShape> {
       validate(args: Record<string, any>): args is TShape {
-        zodValidator.parse(args);
-        return true;
+        return zodValidator.safeParse(args).success;
       }
 
       build<TSuppliedInputArgs extends TShape>(
