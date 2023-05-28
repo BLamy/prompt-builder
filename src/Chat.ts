@@ -1,7 +1,7 @@
-import { PromptBuilder } from "./PromptBuilder";
-import { ChatCompletionRequestMessage } from "openai";
-import { ExtractArgs, ExtractChatArgs, ReplaceChatArgs } from "./types";
 import { F } from "ts-toolbelt";
+import { ChatCompletionRequestMessage } from "openai";
+import { PromptBuilder } from "./PromptBuilder";
+import { ExtractArgs, ExtractChatArgs, ReplaceChatArgs } from "./types";
 
 export class Chat<
   TMessages extends

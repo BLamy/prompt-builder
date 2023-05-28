@@ -1,5 +1,5 @@
-import { ExtractArgs, ReplaceArgs } from "./types";
 import { F } from "ts-toolbelt";
+import { ExtractArgs, ReplaceArgs } from "./types";
 
 export class Prompt<
   TPromptTemplate extends string,

@@ -1,6 +1,6 @@
+import { strict as assert } from "node:assert";
 import { Chat } from "../Chat";
 import { system, user, assistant } from "../ChatHelpers";
-import { strict as assert } from "node:assert";
 import { Equal, Expect } from "./types.test";
 
 describe("Chat", () => {

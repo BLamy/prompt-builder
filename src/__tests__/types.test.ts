@@ -1,3 +1,4 @@
+import { z } from "zod";
 import {
   ExtractArgs,
   ExtractArgsAsTuple,
@@ -69,6 +70,13 @@ type fadsfsa = ExtractArgs<
   { jokeType: number }
 >;
 //      ^?
+type foo = ExtractArgs<
+  "Tell {{person}} a {{jokeType}} joke",
+  {
+    person: string;
+    jokeType: string;
+  }
+>;
 
 type testExtractArgs = [
   Expect<

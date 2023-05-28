@@ -1,7 +1,7 @@
+import { strict as assert } from "node:assert";
 import { ZodError, z } from "zod";
 import { ChatBuilder } from "../ChatBuilder";
 import { user, system, assistant } from "../ChatHelpers";
-import { strict as assert } from "node:assert";
 import { Equal, Expect } from "./types.test";
 
 describe("ChatBuilder", () => {
@@ -78,11 +78,9 @@ describe("ChatBuilder", () => {
     const chatBuilder = new ChatBuilder([])
       //     ^?
       .user(`Tell me a {{jokeType}} joke`)
-      .addZodInputValidation(
-        z.object({
-          jokeType: z.union([z.literal("funny"), z.literal("bad")]),
-        })
-      );
+      .addZodInputValidation({
+        jokeType: z.union([z.literal("funny"), z.literal("bad")]),
+      });
 
     const chat = chatBuilder.build({
       //   ^?
@@ -193,13 +191,11 @@ describe("ChatBuilder", () => {
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell {{me}} {{num}} Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
-    ]).addZodInputValidation(
-      z.object({
-        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-        me: z.union([z.literal("Brett"), z.literal("Liana")]),
-        num: z.number(),
-      })
-    );
+    ]).addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+      me: z.union([z.literal("Brett"), z.literal("Liana")]),
+      num: z.number(),
+    });
 
     const chat = chatBuilder.build({
       jokeType: "funny",
@@ -311,13 +307,12 @@ describe("ChatBuilder", () => {
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell {{me}} {{num}} Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
-    ]).addZodInputValidation(
-      z.object({
-        jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-        me: z.union([z.literal("Brett"), z.literal("Liana")]),
-        num: z.number(),
-      })
-    );
+    ]).addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+      me: z.union([z.literal("Brett"), z.literal("Liana")]),
+      num: z.number(),
+    });
+
     const args = {
       jokeType: "funny",
       num: 1,
