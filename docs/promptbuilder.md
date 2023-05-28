@@ -103,9 +103,9 @@ import { PromptBuilder } from 'prompt-builder';
 const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
 
 // Define a Zod schema for inputs
-const validatedPromptBuilder = promptBuilder.addZodInputValidation(z.object({
+const validatedPromptBuilder = promptBuilder.addZodInputValidation({
   jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-}));
+});
 
 const prompt = validatedPromptBuilder.build({
   jokeType: "funny",
@@ -143,9 +143,9 @@ If zod validation is added to a PromptBuilder then you can use the `validate` ty
 import { z } from 'zod';
 import { PromptBuilder } from 'prompt-builder';
 
-const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke").addZodInputValidation(z.object({
+const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke").addZodInputValidation({
   jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-}));
+});
 
 const args = {
   jokeType: "funny",

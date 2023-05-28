@@ -6,50 +6,54 @@ description: TODO WIP
 
 ### `ChatBuilder` Class
 
-This is the main class of the `prompt-builder` library. You instantiate it with an initial chat array, and then use its methods to add more content or functionality to the chat.
+The ChatBuilder class is designed to help in constructing chat conversations with validation. It provides a way to programmatically create chat messages with varying roles (user, system, assistant), input validation, and builds chat arrays.
 
+The ChatBuilder constructor takes an array of ChatCompletionRequestMessage types, and an optional TExpectedInput which represents the expected input format for this chat.
+
+The ChatBuilder provides methods for chaining actions, adding messages with various roles, adding input validation, and building the resulting chat.
+
+
+## Basic Usage
 ```ts
 import { ChatBuilder } from "prompt-builder";
 
 const chatBuilder = new ChatBuilder([
   {
     role: "system",
-    content: "You are a joke generator. You only tell {{jokeType}} jokes.",
+    content: "This is an example of a system message",
   },
   {
     role: "user",
-    content: "Tell {{me}} {{num}} Jokes.",
+    content: "This is an example of a user message",
   },
   {
     role: "assistant",
-    content: "Sure! Let me think...",
+    content: "This is an example of a assistant message",
   },
 ]);
 ```
 
-Here we've initialized a chatBuilder with an array of prompts. Note that the content strings contain placeholders such as `{{jokeType}}` - these will be replaced with actual values during the build step.
+Here we've initialized a chatBuilder with an array of prompts. Note that the content strings contain placeholders such as `{{uiLibrary}}` - these will be replaced with actual values during the build step.
 
 ### `user`, `system`, `assistant` Methods
-
-You can add more prompts to the chat using the `user`, `system`, and `assistant` methods. They take a string as an argument, which can contain variables in the form `{{variableName}}`. The resulting strings will not contain the leading whitespace.
-
-Here's an example of how to use these methods:
+You can add more prompts to an existing ChatBuilder by chaining the `user`, `system`, and `assistant` methods. They take a string as an argument, which can contain variables in the form `{{variableName}}`. The resulting strings will not contain the leading whitespace.
 
 ```typescript
 import { ChatBuilder } from "prompt-builder";
 
 const chatBuilder = new ChatBuilder([])
+  .system("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}")
   .user(`
-    Tell me a {{jokeType}} joke.
-    Make it a good one!
+    # ComponentName
+    {{componentDescription}}
+    # ComponentDesc
+    {{componentDescription}}
   `)
   .assistant(`
-    {{jokeType}} joke?
-    I'll do my best!
-  `)
-  .system(`
-    Processing {{jokeType}} joke.
-    Please stand by.
+    export const HelloWorld ({ text }) => (
+      return <div>{text}</div>
+    );
+    export default HelloWorld
   `);
 
 ```
@@ -75,61 +79,31 @@ const chatBuilder2 = new ChatBuilder([
 ]);
 ```
 
-You can see that the `user`, `system`, and `assistant` methods allow us to easily add new prompts to the chat.
-
-### `addZodInputValidation` Method
-
-This method is used to validate the arguments that will be used to replace the placeholders in the prompts. It takes a Zod schema as an argument. If the schema is not fulfilled, the `validate` method will return false.
-
+Prompt-builder also provides helper methods for each of openais message roles (`user`, `system`, and `assistant`). 
 ```ts
-import { ChatBuilder } from "prompt-builder";
-import { z } from "zod";
+import { ChatBuilder, user, assistant, system } from "prompt-builder";
 
 const chatBuilder = new ChatBuilder([
-  {
-    role: "system",
-    content: "You are a joke generator. You only tell {{jokeType}} jokes.",
-  },
-  {
-    role: "user",
-    content: "Tell {{me}} {{num}} Jokes.",
-  },
-  {
-    role: "assistant",
-    content: "Probably a bad joke about atoms",
-  },
-]).addZodInputValidation(
-  z.object({
-    jokeType: z.union([z.literal("funny"), z.literal("silly")]),
-    me: z.union([z.literal("Brett"), z.literal("Liana")]),
-    num: z.number(),
-  })
-);
+  system("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}"),
+  user(`
+    # ComponentName
+    {{componentDescription}}
+    # ComponentDesc
+    {{componentDescription}}
+  `),
+  assistant(`
+    export const HelloWorld ({ text }) => (
+      return <div>{text}</div>
+    );
+    export default HelloWorld
+  `),
+]);
 ```
 
-Here, we've added validation for our prompts. The `jokeType` can only be "funny" or "silly", the `me` variable can only be "Brett" or "Liana", and `num` must be a number.
-
-### `validate` Method
-
-You can validate the arguments against the defined Zod schema by using the `validate` method. It takes the arguments object as a parameter and returns `true` if the validation is successful or `false` otherwise.
-
-```ts
-const args = {
-  jokeType: "funny",
-  num: 1,
-  me: "Brett",
-};
-
-if (chatBuilder.validate(args)) {
-  console.log("The arguments are valid!");
-
-
-} else {
-  console.log("Invalid arguments.");
-}
-```
-
-Here, we're validating the `args` object against our Zod schema. If the schema is fulfilled, we print "The arguments are valid!", otherwise we print "Invalid arguments."
+note: helper methods also work as tagged template literals however due to restrictions in typescript they will be typed as `string` instead of a string literal
+// TODO 
+// - update this note to be a real note. 
+// - add link to typescript issue ticket
 
 ### `build` Method
 
@@ -148,3 +122,46 @@ const chat = chatBuilder.build(args);
 Here, we're passing the `args` object to the `build` method. This object will be used to replace the placeholders in our prompts, and the resulting chat will be returned.
 
 These are the basic methods provided by the `prompt-builder` library to create, validate, and build chats.
+
+
+### `addZodInputValidation` Method
+
+This method is used to validate the arguments that will be used to replace the placeholders in the prompts. It takes a Zod schema as an argument. If the schema is not fulfilled, the `validate` method will return false.
+
+```ts
+import { ChatBuilder, system, user } from "prompt-builder";
+import { z } from "zod";
+
+const chatBuilder = new ChatBuilder([
+  system("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}"),
+  user("{{componentDescription}}"),
+]).addZodInputValidation({
+  uiLibrary: z.union([z.literal("daisyui"), z.literal("shadcn")]),
+  language: z.union([z.literal("javascript"), z.literal("typescript")]),
+  componentDescription: z.string(),
+});
+```
+
+Here, we've added validation for our prompts. The `jokeType` can only be "funny" or "silly", the `me` variable can only be "Brett" or "Liana", and `num` must be a number.
+
+### `validate` Method
+
+You can validate the arguments against the defined Zod schema by using the `validate` method. It takes the arguments object as a parameter and returns `true` if the validation is successful or `false` otherwise.
+
+```ts
+import { ChatBuilder } from 'prompt-builder';
+
+const chatBuilder = ChatBuilder([
+  user("Tell me a {{jokeType}} joke.")
+]);
+
+const args = { jokeType: "funnsy" };
+
+if (chatBuilder.validate(args)) {
+  console.log("The arguments are valid!", args);
+} else {
+  console.log("Invalid arguments.", args);
+}
+```
+
+Here, we're validating the `args` object against our Zod schema. If the schema is fulfilled, we print "The arguments are valid!", otherwise we print "Invalid arguments."
