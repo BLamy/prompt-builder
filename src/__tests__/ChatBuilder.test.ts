@@ -347,4 +347,23 @@ describe("ChatBuilder", () => {
       throw new Error("Invalid args");
     }
   });
+
+  it("validate props should fail if invalid args provided", () => {
+    const chatBuilder = new ChatBuilder([
+      // ^?
+      system(`You are a joke generator you only tell {{jokeType}} jokes`),
+      user(`Tell Jokes.`),
+      assistant(`Probably a bad joke a about atoms`),
+    ]).addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+    });
+
+    const args = {
+      jokeType: "any",
+    };
+    if (chatBuilder.validate(args)) {
+      // CANNOT validate at runtime if only ts types provided
+      throw new Error("Invalid args");
+    }
+  });
 });
