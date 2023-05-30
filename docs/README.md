@@ -54,7 +54,7 @@ PromptBuilder & ChatBuilder provide typescript support validating inputs at comp
 
 <figure><img src=".gitbook/assets/ChatBuilder.gif" alt=""><figcaption></figcaption></figure>
 
-## Runtime validation with zod
+### Runtime validation with zod
 
 Sometimes variables come from user input and aren't known at compile time. A zod object can be provided as an alternative to providing types using typescript.
 
