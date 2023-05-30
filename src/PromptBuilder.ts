@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { F } from "ts-toolbelt";
 import { Prompt } from "./Prompt";
-import { ExtractArgs, TypeToZodShape } from "./types";
+import { ExtractArgs, ReplaceArgs, TypeToZodShape } from "./types";
 
 export class PromptBuilder<
   TPromptTemplate extends string,
@@ -24,6 +24,10 @@ export class PromptBuilder<
         return zodValidator.safeParse(args).success;
       }
 
+      get type() {
+        return this.template as ReplaceArgs<TPromptTemplate, TShape>;
+      }
+
       build<TSuppliedInputArgs extends TShape>(
         args: F.Narrow<TSuppliedInputArgs>
       ) {
@@ -38,12 +42,13 @@ export class PromptBuilder<
     return false;
   }
 
+  get type() {
+    return this.template as ReplaceArgs<TPromptTemplate, TExpectedInput>;
+  }
+
   build<TSuppliedInputArgs extends TExpectedInput>(
     args: F.Narrow<TSuppliedInputArgs>
   ) {
-    return new Prompt<TPromptTemplate, TSuppliedInputArgs>(
-      this.template,
-      args
-    ).toString();
+    return new Prompt(this.template, args).toString();
   }
 }
