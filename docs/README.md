@@ -50,11 +50,12 @@ If your prompts are strictly typed as literals then you can write a generate fun
 
 PromptBuilder & ChatBuilder provide typescript support validating inputs at compile time.
 
-&#x20;![](.gitbook/assets/ChatBuilder.gif)
+&#x20;
+
+<figure><img src=".gitbook/assets/ChatBuilder.gif" alt=""><figcaption></figcaption></figure>
 
 ## Runtime validation with zod
 
 Sometimes variables come from user input and aren't known at compile time. A zod object can be provided as an alternative to providing types using typescript.
 
-{% embed url="https://stackblitz.com/edit/node-d9zsaf?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" fullWidth="true" %}
-
+{% embed url="https://stackblitz.com/edit/stackblitz-starters-5jzdje?file=src%2FApp.tsx" %}
