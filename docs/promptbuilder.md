@@ -8,8 +8,6 @@ description: API Docs for PromptBuilder class
 
 The `PromptBuilder` class allows you to define your template and then `build()` your prompt using the supplied data. Note that the result of the `build()` function is still a string literal, meaning you can later write a function that expects certain string literals, making it easy to split out which prompts can go to what providers at a type level.
 
-
-
 ### Basic Usage
 
 {% tabs %}
@@ -91,7 +89,7 @@ In the above example, we're defining the `jokeType` argument to be either "funny
 {% endtab %}
 
 {% tab title="Screenshot" %}
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption><p><a href="https://tsplay.dev/mZvRKm">TS Playground Example</a></p></figcaption></figure>
 {% endtab %}
 
 {% tab title="Code" %}
@@ -126,7 +124,7 @@ In the above example, we're defining a Zod schema for our input. This gives us m
 
 #### Validate - TS helper
 
-If zod validation is added to a PromptBuilder then you can use the `validate` type predicate to scope down your types in the event a prompt builder requires a type more narrow than is currently defined.&#x20;
+If zod validation is added to a PromptBuilder then you can use the `validate` type predicate to scope down your types in the event a prompt builder requires a type more narrow than is currently defined.
 
 {% tabs %}
 {% tab title="Demo" %}

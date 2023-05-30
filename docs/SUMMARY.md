@@ -1,6 +1,7 @@
 # Table of contents
 
-* [Prompt](README.md)
+* [Getting Started](README.md)
+* [Prompt](<README (1).md>)
 * [PromptBuilder](promptbuilder.md)
 * [Chat](chat.md)
 * [ChatBuilder](chatbuilder.md)
