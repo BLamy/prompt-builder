@@ -301,7 +301,7 @@ describe("ChatBuilder", () => {
       me: "zxcv",
     });
   });
-  it("should be able to validate props for a ZodPromptBuilder", () => {
+  it("should be able to validate props for a ZodChatBuilder", () => {
     const chatBuilder = new ChatBuilder([
       // ^?
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
@@ -365,5 +365,94 @@ describe("ChatBuilder", () => {
       // CANNOT validate at runtime if only ts types provided
       throw new Error("Invalid args");
     }
+  });
+
+  it("tsvalidated should have same loose type as zod validated", () => {
+    const chatBuilder = new ChatBuilder([
+      user("Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"),
+    ]);
+    type BasicType = typeof chatBuilder.type;
+    //      ^?
+    type BasicTest = Expect<
+      Equal<
+        BasicType,
+        [
+          {
+            role: "user";
+            content: `Tell ${any} ${any} ${any} ${any} joke`;
+          }
+        ]
+      >
+    >;
+
+    const tsValidatedChatBuilder = chatBuilder.addInputValidation<{
+      jokeType: "funny" | "silly";
+      me: "Brett" | "Liana";
+      num: number;
+      bool: boolean;
+    }>();
+    type TSValidatedType = typeof tsValidatedChatBuilder.type;
+    //      ^?
+
+    const validatedChatBuilder = chatBuilder.addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+      me: z.union([z.literal("Brett"), z.literal("Liana")]),
+      num: z.number(),
+      bool: z.boolean(),
+    });
+    type ZodValidatedType = typeof validatedChatBuilder.type;
+    //     ^?
+    type asdfasdf = Expect<Equal<TSValidatedType, ZodValidatedType>>;
+  });
+
+  test("Can write a function that accepts the type of a ChatBuilder then accepts any output from that builder", () => {
+    const chatBuilder = new ChatBuilder([
+      user("Tell me a {{jokeType}} joke"),
+    ]).addInputValidation<{
+      jokeType: "funny" | "silly";
+    }>();
+    function exampleFunction(input: typeof chatBuilder.type) {}
+
+    exampleFunction(chatBuilder.build({ jokeType: "funny" }));
+    exampleFunction([user("Tell me a funny joke")]);
+    exampleFunction(chatBuilder.build({ jokeType: "silly" }));
+    exampleFunction([user("Tell me a silly joke")]);
+    // @ts-expect-error
+    exampleFunction(chatBuilder.build({ jokeType: "bad" }));
+    // @ts-expect-error
+    exampleFunction("Tell me a bad joke.");
+  });
+
+  test("Can write a function that accepts the type of a PromptBuilder then accepts any output from that builder", () => {
+    const chatBuilder = new ChatBuilder([
+      user("Tell me a {{jokeType}} joke"),
+    ]).addZodInputValidation({
+      jokeType: z.union([z.literal("funny"), z.literal("silly")]),
+    });
+    function exampleFunction(input: typeof chatBuilder.type) {}
+
+    exampleFunction(chatBuilder.build({ jokeType: "funny" }));
+    exampleFunction([user("Tell me a funny joke")]);
+    exampleFunction(chatBuilder.build({ jokeType: "silly" }));
+    exampleFunction([user("Tell me a silly joke")]);
+    // @ts-expect-error
+    exampleFunction("Tell me a bad joke.");
+    assert.throws(
+      () => {
+        // @ts-expect-error
+        exampleFunction(chatBuilder.build({ jokeType: "bad" }));
+      },
+      (error: ZodError) => {
+        const issues = error.issues.reduce(
+          (acc, issue) => ({
+            ...acc,
+            [issue.path[0]]: issue.message,
+          }),
+          {}
+        );
+        assert.deepEqual(issues, { jokeType: "Invalid input" });
+        return true;
+      }
+    );
   });
 });

@@ -3,7 +3,7 @@ import { F } from "ts-toolbelt";
 import { ChatCompletionRequestMessage } from "openai";
 import { Chat } from "./Chat";
 import { user, assistant, system } from "./ChatHelpers";
-import { ExtractArgs, ExtractChatArgs, TypeToZodShape } from "./types";
+import { ExtractArgs, ExtractChatArgs, TypeToZodShape, ReplaceChatArgs } from "./types";
 
 export class ChatBuilder<
   TMessages extends
@@ -55,6 +55,10 @@ export class ChatBuilder<
         return zodValidator.safeParse(args).success;
       }
 
+      get type() {
+        return this.messages as ReplaceChatArgs<TMessages, TShape>;
+      }
+    
       build<TSuppliedInputArgs extends TShape>(
         args: F.Narrow<TSuppliedInputArgs>
       ) {
@@ -67,6 +71,10 @@ export class ChatBuilder<
   validate(args: Record<string, any>): args is TExpectedInput {
     // Validate can only be called on a PromptBuilder with zod input validation
     return false;
+  }
+
+  get type() {
+    return this.messages as ReplaceChatArgs<TMessages, TExpectedInput>;
   }
 
   build<TSuppliedInputArgs extends TExpectedInput>(
