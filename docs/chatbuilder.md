@@ -12,8 +12,8 @@ The ChatBuilder constructor takes an array of ChatCompletionRequestMessage types
 
 The ChatBuilder provides methods for chaining actions, adding messages with various roles, adding input validation, and building the resulting chat.
 
-
 ## Basic Usage
+
 ```ts
 import { ChatBuilder } from "prompt-builder";
 
@@ -36,6 +36,7 @@ const chatBuilder = new ChatBuilder([
 Here we've initialized a chatBuilder with an array of prompts. Note that the content strings contain placeholders such as `{{uiLibrary}}` - these will be replaced with actual values during the build step.
 
 ### `user`, `system`, `assistant` Methods
+
 You can add more prompts to an existing ChatBuilder by chaining the `user`, `system`, and `assistant` methods. They take a string as an argument, which can contain variables in the form `{{variableName}}`. The resulting strings will not contain the leading whitespace.
 
 ```typescript
@@ -79,7 +80,8 @@ const chatBuilder2 = new ChatBuilder([
 ]);
 ```
 
-Prompt-builder also provides helper methods for each of openais message roles (`user`, `system`, and `assistant`). 
+Prompt-builder also provides helper methods for each of openais message roles (`user`, `system`, and `assistant`).
+
 ```ts
 import { ChatBuilder, user, assistant, system } from "prompt-builder";
 
@@ -100,10 +102,7 @@ const chatBuilder = new ChatBuilder([
 ]);
 ```
 
-note: helper methods also work as tagged template literals however due to restrictions in typescript they will be typed as `string` instead of a string literal
-// TODO 
-// - update this note to be a real note. 
-// - add link to typescript issue ticket
+note: helper methods also work as tagged template literals however due to restrictions in typescript they will be typed as `string` instead of a string literal // TODO // - update this note to be a real note. // - add link to typescript issue ticket
 
 ### `build` Method
 
@@ -122,7 +121,6 @@ const chat = chatBuilder.build(args);
 Here, we're passing the `args` object to the `build` method. This object will be used to replace the placeholders in our prompts, and the resulting chat will be returned.
 
 These are the basic methods provided by the `prompt-builder` library to create, validate, and build chats.
-
 
 ### `addZodInputValidation` Method
 
@@ -165,3 +163,9 @@ if (chatBuilder.validate(args)) {
 ```
 
 Here, we're validating the `args` object against our Zod schema. If the schema is fulfilled, we print "The arguments are valid!", otherwise we print "Invalid arguments."
+
+### `.type` Method
+
+Both PromptBuilder and ChatBuilder provide a .type method that can be used to get the broad type of a prompt before it is built that way you can write a function that accepts all possible outputs from a prompt builder
+
+{% embed url="https://stackblitz.com/edit/node-qhfgwh?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" %}
