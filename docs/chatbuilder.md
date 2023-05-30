@@ -1,5 +1,5 @@
 ---
-description: TODO WIP
+description: Typesafe ChatBuilder
 ---
 
 # ChatBuilder
@@ -167,5 +167,3 @@ Here, we're validating the `args` object against our Zod schema. If the schema i
 ### `.type` Method
 
 Both PromptBuilder and ChatBuilder provide a .type method that can be used to get the broad type of a prompt before it is built that way you can write a function that accepts all possible outputs from a prompt builder
-
-{% embed url="https://stackblitz.com/edit/node-qhfgwh?file=index.ts&terminal=start&embed=1&view=editor&hideExplorer=1&ctl=0" %}
