@@ -25,7 +25,7 @@ yarn add prompt-builder
 
 {% tab title="npm" %}
 ```bash
-npm install prompt-builder --save
+npm install --save prompt-builder
 ```
 {% endtab %}
 {% endtabs %}
