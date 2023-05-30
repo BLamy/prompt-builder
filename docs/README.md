@@ -58,4 +58,4 @@ PromptBuilder & ChatBuilder provide typescript support validating inputs at comp
 
 Sometimes variables come from user input and aren't known at compile time. A zod object can be provided as an alternative to providing types using typescript.
 
-{% embed url="https://stackblitz.com/edit/stackblitz-starters-5jzdje?file=src%2FApp.tsx" fullWidth="true" %}
+{% embed url="https://stackblitz.com/edit/stackblitz-starters-5jzdje?embed=1&file=src%2FApp.tsx&hideExplorer=1" %}
