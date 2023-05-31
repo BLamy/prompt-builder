@@ -4,7 +4,7 @@ description: Typesafe PromptBuilder
 
 # Getting Started
 
-Prompt Builder is a TypeScript library that allows you to build and validate template prompts. You can create dynamic templates with embedded variables and add type checks on these variables.
+Prompt Builder is a TypeScript library that allows you to build and validate prompt templates. You can create dynamic templates with embedded variables and add type checks on these variables.
 
 This library leverages TypeScript's string literal types to perform compile-time validation. It also integrates with the Zod library, providing runtime validation.
 
@@ -49,8 +49,6 @@ If your prompts are strictly typed as literals then you can write a generate fun
 ### Compile time validation with typescript
 
 PromptBuilder & ChatBuilder provide typescript support validating inputs at compile time.
-
-&#x20;
 
 <figure><img src=".gitbook/assets/ChatBuilder.gif" alt=""><figcaption></figcaption></figure>
 
