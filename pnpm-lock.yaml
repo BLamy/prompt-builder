@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/jest': ^29.5.1
   '@types/node': ^20.2.4
+  arktype: 1.0.14-alpha
   jest: ^29.5.0
   openai: ^3.2.1
   ts-jest: ^29.1.0
@@ -11,6 +12,7 @@ specifiers:
   zod: ^3.21.4
 
 dependencies:
+  arktype: 1.0.14-alpha
   zod: 3.21.4
 
 devDependencies:
@@ -768,6 +770,11 @@ packages:
     dependencies:
       sprintf-js: 1.0.3
     dev: true
+
+  /arktype/1.0.14-alpha:
+    resolution: {integrity: sha512-theD5K4QrYCWMtQ52Masj169IgtMJ8Argld/MBS4lotEwR3b+GzfBvsqVJ1OIKhJDTdES02FLQTjcfRe00//mA==}
+    requiresBuild: true
+    dev: false
 
   /asynckit/0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}

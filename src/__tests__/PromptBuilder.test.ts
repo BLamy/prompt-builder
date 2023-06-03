@@ -1,5 +1,6 @@
 import { strict as assert } from "node:assert";
 import { z, ZodError } from "zod";
+import { type } from 'arktype';
 import { PromptBuilder } from "../PromptBuilder";
 import { Equal, Expect } from "./types.test";
 
@@ -282,7 +283,9 @@ describe("PromptBuilder with input validation using Zod", () => {
     );
     type BasicType = typeof promptBuilder.type;
     //      ^?
-    type BasicTest = Expect<Equal<BasicType, `Tell ${any} ${any} ${any} ${any} joke`>>;
+    type BasicTest = Expect<
+      Equal<BasicType, `Tell ${any} ${any} ${any} ${any} joke`>
+    >;
 
     const tsValidatedPromptBuilder = promptBuilder.addInputValidation<{
       jokeType: "funny" | "silly";
@@ -305,34 +308,37 @@ describe("PromptBuilder with input validation using Zod", () => {
   });
 
   test("Can write a function that accepts the type of a PromptBuilder then accepts any output from that builder", () => {
-    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke.").addInputValidation<{
-      jokeType: "funny" | "silly"
+    const promptBuilder = new PromptBuilder(
+      "Tell me a {{jokeType}} joke."
+    ).addInputValidation<{
+      jokeType: "funny" | "silly";
     }>();
     function exampleFunction(input: typeof promptBuilder.type) {}
 
     exampleFunction(promptBuilder.build({ jokeType: "funny" }));
-    exampleFunction("Tell me a funny joke.")
+    exampleFunction("Tell me a funny joke.");
     exampleFunction(promptBuilder.build({ jokeType: "silly" }));
-    exampleFunction("Tell me a silly joke.")
+    exampleFunction("Tell me a silly joke.");
     // @ts-expect-error
     exampleFunction(promptBuilder.build({ jokeType: "bad" }));
     // @ts-expect-error
-    exampleFunction("Tell me a bad joke.")
-  })
-
+    exampleFunction("Tell me a bad joke.");
+  });
 
   test("Can write a function that accepts the type of a PromptBuilder then accepts any output from that builder", () => {
-    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke.").addZodInputValidation({
+    const promptBuilder = new PromptBuilder(
+      "Tell me a {{jokeType}} joke."
+    ).addZodInputValidation({
       jokeType: z.union([z.literal("funny"), z.literal("silly")]),
     });
     function exampleFunction(input: typeof promptBuilder.type) {}
 
     exampleFunction(promptBuilder.build({ jokeType: "funny" }));
-    exampleFunction("Tell me a funny joke.")
+    exampleFunction("Tell me a funny joke.");
     exampleFunction(promptBuilder.build({ jokeType: "silly" }));
-    exampleFunction("Tell me a silly joke.")
+    exampleFunction("Tell me a silly joke.");
     // @ts-expect-error
-    exampleFunction("Tell me a bad joke.")
+    exampleFunction("Tell me a bad joke.");
     assert.throws(
       () => {
         // @ts-expect-error
@@ -350,5 +356,32 @@ describe("PromptBuilder with input validation using Zod", () => {
         return true;
       }
     );
-  })
+  });
+
+  test("Can add arktypes validation", () => {
+    const promptBuilder = new PromptBuilder(
+      "Tell me a {{jokeType}} joke."
+    ).addArkTypeInputValidation(
+      type({
+        jokeType: "'funny' | 'silly'",
+      })
+    );
+    function exampleFunction(input: typeof promptBuilder.type) {}
+
+    exampleFunction(promptBuilder.build({ jokeType: "funny" }));
+    exampleFunction("Tell me a funny joke.");
+    exampleFunction(promptBuilder.build({ jokeType: "silly" }));
+    exampleFunction("Tell me a silly joke.");
+    // @ts-expect-error
+    exampleFunction("Tell me a bad joke.");
+    
+    assert.throws(
+      () => {
+
+        // @ts-expect-error
+        exampleFunction(promptBuilder.build({ jokeType: "bad" }));
+      }
+    );
+
+  });
 });
