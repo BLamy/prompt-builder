@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { Chat } from "../Chat";
-import { system, user, assistant } from "../ChatHelpers";
+import { System, User, Assistant } from "../ChatHelpers";
 import { Equal, Expect } from "./types.test";
 
 describe("Chat", () => {
@@ -14,7 +14,7 @@ describe("Chat", () => {
     const chat = new Chat(
       [
         // ^?
-        user("Tell me a {{jokeType}} joke"),
+        User("Tell me a {{jokeType}} joke"),
       ],
       // @ts-expect-error
       {}
@@ -28,13 +28,13 @@ describe("Chat", () => {
     const chat = new Chat(
       [
         //     ^?
-        user(`Tell me a {{jokeType}} joke`),
+        User(`Tell me a {{jokeType}} joke`),
       ],
       {
         jokeType: "funny" as const,
       }
     ).toArray();
-    const usrMsg = user("Tell me a funny joke");
+    const usrMsg = User("Tell me a funny joke");
     //     ^?
     type test = Expect<Equal<typeof chat, [typeof usrMsg]>>;
     assert.deepEqual(chat, [usrMsg]);
@@ -44,9 +44,9 @@ describe("Chat", () => {
     const chat = new Chat(
       [
         // ^?
-        user(`Tell me a {{jokeType1}} joke`),
-        assistant(`{{var2}} joke?`),
-        system(`joke? {{var3}}`),
+        User(`Tell me a {{jokeType1}} joke`),
+        Assistant(`{{var2}} joke?`),
+        System(`joke? {{var3}}`),
       ],
       {
         jokeType1: "funny",
@@ -54,9 +54,9 @@ describe("Chat", () => {
         var3: "bar",
       } as const
     ).toArray();
-    const usrMsg = user("Tell me a funny joke");
-    const astMsg = assistant("foo joke?");
-    const sysMsg = system("joke? bar");
+    const usrMsg = User("Tell me a funny joke");
+    const astMsg = Assistant("foo joke?");
+    const sysMsg = System("joke? bar");
     type test = Expect<
       Equal<typeof chat, [typeof usrMsg, typeof astMsg, typeof sysMsg]>
     >;
@@ -67,15 +67,15 @@ describe("Chat", () => {
     const chat = new Chat(
       [
         // ^?
-        user(`Tell me a joke`),
-        assistant(`joke?`),
-        system(`joke?`),
+        User(`Tell me a joke`),
+        Assistant(`joke?`),
+        System(`joke?`),
       ],
       {}
     ).toArray();
-    const usrMsg = user("Tell me a joke");
-    const astMsg = assistant("joke?");
-    const sysMsg = system("joke?");
+    const usrMsg = User("Tell me a joke");
+    const astMsg = Assistant("joke?");
+    const sysMsg = System("joke?");
     type test = Expect<
       Equal<typeof chat, [typeof usrMsg, typeof astMsg, typeof sysMsg]>
     >;

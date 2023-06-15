@@ -1,7 +1,6 @@
 // ChatMessage creation helpers
-// Ideally these would Dedent their content, but ts is checker is way too slow
 // https://tinyurl.com/message-creators-literal-types
-export function system<T extends string>(
+export function System<T extends string>(
   literals: TemplateStringsArray | T,
   ...placeholders: unknown[]
 ) {
@@ -10,7 +9,7 @@ export function system<T extends string>(
     content: dedent(literals, ...placeholders),
   };
 }
-export function user<T extends string>(
+export function User<T extends string>(
   literals: TemplateStringsArray | T,
   ...placeholders: unknown[]
 ) {
@@ -19,7 +18,7 @@ export function user<T extends string>(
     content: dedent(literals, ...placeholders),
   };
 }
-export function assistant<T extends string>(
+export function Assistant<T extends string>(
   literals: TemplateStringsArray | T,
   ...placeholders: unknown[]
 ) {
@@ -28,6 +27,20 @@ export function assistant<T extends string>(
     content: dedent(literals, ...placeholders),
   };
 }
+export function Function<T extends string>(
+  literals: TemplateStringsArray | T,
+  ...placeholders: unknown[]
+) {
+  return {
+    role: "function" as const,
+    content: dedent(literals, ...placeholders),
+  };
+}
+
+// backwards compadibility
+export const system = System;
+export const user = User;
+export const assistant = Assistant;
 
 export function dedent<T extends string>(
   templ: TemplateStringsArray | T,
