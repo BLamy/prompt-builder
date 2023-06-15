@@ -3,21 +3,23 @@ lockfileVersion: 5.4
 specifiers:
   '@types/jest': ^29.5.1
   '@types/node': ^20.2.4
+  arktype: 1.0.14-alpha
   jest: ^29.5.0
-  openai: ^3.2.1
+  openai: ^3.3.0
   ts-jest: ^29.1.0
   ts-toolbelt: ^9.6.0
   typescript: ^5.0.4
   zod: ^3.21.4
 
 dependencies:
+  arktype: 1.0.14-alpha
   zod: 3.21.4
 
 devDependencies:
   '@types/jest': 29.5.1
   '@types/node': 20.2.4
   jest: 29.5.0_@types+node@20.2.4
-  openai: 3.2.1
+  openai: 3.3.0
   ts-jest: 29.1.0_tobmchb5uviuq5lwsinkw5fvje
   ts-toolbelt: 9.6.0
   typescript: 5.0.4
@@ -768,6 +770,11 @@ packages:
     dependencies:
       sprintf-js: 1.0.3
     dev: true
+
+  /arktype/1.0.14-alpha:
+    resolution: {integrity: sha512-theD5K4QrYCWMtQ52Masj169IgtMJ8Argld/MBS4lotEwR3b+GzfBvsqVJ1OIKhJDTdES02FLQTjcfRe00//mA==}
+    requiresBuild: true
+    dev: false
 
   /asynckit/0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
@@ -1922,8 +1929,8 @@ packages:
       mimic-fn: 2.1.0
     dev: true
 
-  /openai/3.2.1:
-    resolution: {integrity: sha512-762C9BNlJPbjjlWZi4WYK9iM2tAVAv0uUp1UmI34vb0CN5T2mjB/qM6RYBmNKMh/dN9fC+bxqPwWJZUTWW052A==}
+  /openai/3.3.0:
+    resolution: {integrity: sha512-uqxI/Au+aPRnsaQRe8CojU0eCR7I0mBiKjD3sNMzY6DaC1ZVrc85u98mtJW6voDug8fgGN+DIZmTDxTthxb7dQ==}
     dependencies:
       axios: 0.26.1
       form-data: 4.0.0

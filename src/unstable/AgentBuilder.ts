@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { F } from "ts-toolbelt";
 import { ChatCompletionRequestMessage } from "openai";
-import { Chat } from "./Chat";
-import { User, Assistant, System, Function } from "./ChatHelpers";
-import { ExtractArgs, ExtractChatArgs, TypeToZodShape, ReplaceChatArgs } from "./types";
+import { Chat } from "../Chat";
+import { user, assistant, system } from "../ChatHelpers";
+import { ExtractArgs, ExtractChatArgs, TypeToZodShape, ReplaceChatArgs } from "../types";
 
-export class ChatBuilder<
+export class AgentBuilder<
   TMessages extends
     | []
     | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
@@ -15,56 +15,46 @@ export class ChatBuilder<
 
   addInputValidation<
     TSTypeValidator extends ExtractChatArgs<TMessages, TSTypeValidator>
-  >(): ChatBuilder<TMessages, TSTypeValidator> {
-    return new ChatBuilder(this.messages) as any;
+  >(): AgentBuilder<TMessages, TSTypeValidator> {
+    return new AgentBuilder(this.messages) as any;
   }
 
-  User<TUserText extends string>(
+  addOutputValidation<
+    TSTypeValidator extends ExtractChatArgs<TMessages, TSTypeValidator>
+ >(): AgentBuilder<TMessages, TSTypeValidator> {
+
+  user<TUserText extends string>(
     str: TUserText
-  ): ChatBuilder<
+  ): AgentBuilder<
     [...TMessages, { role: "user"; content: TUserText }],
     F.Narrow<TExpectedInput> & ExtractArgs<TUserText>
   > {
-    return new ChatBuilder([...this.messages, User(str)]) as any;
+    return new AgentBuilder([...this.messages, user(str)]) as any;
   }
 
-  System<TSystemText extends string>(
+  system<TSystemText extends string>(
     str: TSystemText
-  ): ChatBuilder<
+  ): AgentBuilder<
     [...TMessages, { role: "system"; content: TSystemText }],
     F.Narrow<TExpectedInput> & ExtractArgs<TSystemText>
   > {
-    return new ChatBuilder([...this.messages, System(str)]) as any;
+    return new AgentBuilder([...this.messages, system(str)]) as any;
   }
 
-  Assistant<TAssistantText extends string>(
+  assistant<TAssistantText extends string>(
     str: TAssistantText
-  ): ChatBuilder<
+  ): AgentBuilder<
     [...TMessages, { role: "assistant"; content: TAssistantText }],
     F.Narrow<TExpectedInput> & ExtractArgs<TAssistantText>
   > {
-    return new ChatBuilder([...this.messages, Assistant(str)]) as any;
-  }
-  
-  // Backwards compadibility
-  user = this.User;
-  system = this.System;
-  assistant = this.Assistant;
-
-  Function<TAssistantText extends string>(
-    str: TAssistantText
-  ): ChatBuilder<
-    [...TMessages, { role: "function"; content: TAssistantText }],
-    F.Narrow<TExpectedInput> & ExtractArgs<TAssistantText>
-  > {
-    return new ChatBuilder([...this.messages, Function(str)]) as any;
+    return new AgentBuilder([...this.messages, assistant(str)]) as any;
   }
 
   addZodInputValidation<TShape extends TExpectedInput>(
     shape: TypeToZodShape<TShape>
   ) {
     const zodValidator = z.object(shape as any);
-    return new (class extends ChatBuilder<TMessages, TShape> {
+    return new (class extends AgentBuilder<TMessages, TShape> {
       validate(args: Record<string, any>): args is TShape {
         return zodValidator.safeParse(args).success;
       }
