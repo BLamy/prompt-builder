@@ -43,14 +43,14 @@ You can add more prompts to an existing ChatBuilder by chaining the `user`, `sys
 import { ChatBuilder } from "prompt-builder";
 
 const chatBuilder = new ChatBuilder([])
-  .system("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}")
-  .user(`
+  .System("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}")
+  .User(`
     # ComponentName
     {{componentDescription}}
     # ComponentDesc
     {{componentDescription}}
   `)
-  .assistant(`
+  .Assistant(`
     export const HelloWorld ({ text }) => (
       return <div>{text}</div>
     );
@@ -62,18 +62,18 @@ const chatBuilder = new ChatBuilder([])
 Or using helper methods:
 
 ```ts
-import { ChatBuilder, user, assistant, system } from "prompt-builder";
+import { ChatBuilder, User, Assistant, System } from "prompt-builder";
 
 const chatBuilder2 = new ChatBuilder([
-  user(`
+  User(`
     Tell me a {{jokeType}} joke.
     Make it a good one!
   `),
-  assistant(`
+  Assistant(`
     {{jokeType}} joke?
     I'll do my best!
   `),
-  system(`
+  System(`
     Processing {{jokeType}} joke.
     Please stand by.
   `),
@@ -83,17 +83,17 @@ const chatBuilder2 = new ChatBuilder([
 Prompt-builder also provides helper methods for each of openais message roles (`user`, `system`, and `assistant`).
 
 ```ts
-import { ChatBuilder, user, assistant, system } from "prompt-builder";
+import { ChatBuilder, User, Assistant, System } from "prompt-builder";
 
 const chatBuilder = new ChatBuilder([
-  system("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}"),
-  user(`
+  System("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}"),
+  User(`
     # ComponentName
     {{componentDescription}}
     # ComponentDesc
     {{componentDescription}}
   `),
-  assistant(`
+  Assistant(`
     export const HelloWorld ({ text }) => (
       return <div>{text}</div>
     );
@@ -127,12 +127,12 @@ These are the basic methods provided by the `prompt-builder` library to create, 
 This method is used to validate the arguments that will be used to replace the placeholders in the prompts. It takes a Zod schema as an argument. If the schema is not fulfilled, the `validate` method will return false.
 
 ```ts
-import { ChatBuilder, system, user } from "prompt-builder";
+import { ChatBuilder, System, User } from "prompt-builder";
 import { z } from "zod";
 
 const chatBuilder = new ChatBuilder([
-  system("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}"),
-  user("{{componentDescription}}"),
+  System("You are a react component generater. Please create components using only the following dependencies react, tailwind, {{uiLibrary}}, and {{language}}"),
+  User("{{componentDescription}}"),
 ]).addZodInputValidation({
   uiLibrary: z.union([z.literal("daisyui"), z.literal("shadcn")]),
   language: z.union([z.literal("javascript"), z.literal("typescript")]),
@@ -147,10 +147,10 @@ Here, we've added validation for our prompts. The `jokeType` can only be "funny"
 You can validate the arguments against the defined Zod schema by using the `validate` method. It takes the arguments object as a parameter and returns `true` if the validation is successful or `false` otherwise.
 
 ```ts
-import { ChatBuilder } from 'prompt-builder';
+import { ChatBuilder, User } from 'prompt-builder';
 
 const chatBuilder = ChatBuilder([
-  user("Tell me a {{jokeType}} joke.")
+  User("Tell me a {{jokeType}} joke.")
 ]);
 
 const args = { jokeType: "funnsy" };

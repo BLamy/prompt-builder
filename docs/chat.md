@@ -16,14 +16,14 @@ The Chat Builder simplifies the creation, validation and manipulation of chat me
 {% tab title="Code" %}
 {% code lineNumbers="true" %}
 ```typescript
-import { Chat, user, system, assistant } from "prompt-builder";
+import { Chat, User, System, Assistant } from "prompt-builder";
 
 const chat = new Chat(
   //   ^?
   [
-    system(`Tell me a {{jokeType}} joke`),
-    user(`{{response}} joke?`),
-    assistant(`joke? {{comment}}`),
+    System(`Tell me a {{jokeType}} joke`),
+    User(`{{response}} joke?`),
+    Assistant(`joke? {{comment}}`),
   ],
   {
     jokeType: "funny",
