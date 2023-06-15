@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ChatCompletionRequestMessage } from "openai";
 
 export type ReplaceArgs<
-  TPromptTemplate extends string,
+  TPromptTemplate extends string | undefined,
   TArgs extends Record<string, any>
 > = TPromptTemplate extends `${infer TStart}{{${infer TDataType}}}${infer TRest}`
   ? TRest extends `${string}{{${string}}}` | `${string}{{${string}}}${string}`
@@ -10,7 +10,7 @@ export type ReplaceArgs<
     : `${TStart}${TArgs[TDataType]}${TRest}`
   : TPromptTemplate;
 
-export type ExtractArgsAsTuple<TPromptTemplate extends string> =
+export type ExtractArgsAsTuple<TPromptTemplate extends string | undefined> =
   TPromptTemplate extends `${string}{{${infer TDataType}}}${infer TRest}`
     ? TRest extends `${string}{{${string}}}` | `${string}{{${string}}}${string}`
       ? [TDataType, ...ExtractArgsAsTuple<TRest>]
@@ -18,7 +18,7 @@ export type ExtractArgsAsTuple<TPromptTemplate extends string> =
     : [];
 
 export type ExtractArgs<
-  TPromptTemplate extends string,
+  TPromptTemplate extends string | undefined,
   TSTypeValidator = ExtractArgs<TPromptTemplate, {}>
 > = {
   [K in ExtractArgsAsTuple<TPromptTemplate>[number] as K]: K extends keyof TSTypeValidator

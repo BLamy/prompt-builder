@@ -4,7 +4,7 @@ import { Prompt } from "./Prompt";
 import { ExtractArgs, ReplaceArgs, TypeToZodShape } from "./types";
 
 export class PromptBuilder<
-  TPromptTemplate extends string,
+  TPromptTemplate extends string | undefined,
   TExpectedInput extends ExtractArgs<TPromptTemplate, {}>
 > {
   constructor(public template: TPromptTemplate) {}

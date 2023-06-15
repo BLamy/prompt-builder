@@ -1,7 +1,7 @@
 // ChatMessage creation helpers
 // Ideally these would Dedent their content, but ts is checker is way too slow
 // https://tinyurl.com/message-creators-literal-types
-export function system<T extends string>(
+export function System<T extends string | undefined>(
   literals: TemplateStringsArray | T,
   ...placeholders: unknown[]
 ) {
@@ -10,7 +10,7 @@ export function system<T extends string>(
     content: dedent(literals, ...placeholders),
   };
 }
-export function user<T extends string>(
+export function User<T extends string | undefined>(
   literals: TemplateStringsArray | T,
   ...placeholders: unknown[]
 ) {
@@ -19,7 +19,7 @@ export function user<T extends string>(
     content: dedent(literals, ...placeholders),
   };
 }
-export function assistant<T extends string>(
+export function Assistant<T extends string | undefined>(
   literals: TemplateStringsArray | T,
   ...placeholders: unknown[]
 ) {
@@ -28,12 +28,26 @@ export function assistant<T extends string>(
     content: dedent(literals, ...placeholders),
   };
 }
+export function Function<T extends string | undefined>(
+  literals: TemplateStringsArray | T,
+  ...placeholders: unknown[]
+) {
+  return {
+    role: "function" as const,
+    content: dedent(literals, ...placeholders),
+  };
+}
 
-export function dedent<T extends string>(
+// legacy purposes
+export const assistant = Assistant;
+export const user = User;
+export const system = System;
+
+export function dedent<T extends string | undefined>(
   templ: TemplateStringsArray | T,
   ...values: unknown[]
-): typeof templ extends TemplateStringsArray ? string : T {
-  let strings = Array.from(typeof templ === "string" ? [templ] : templ);
+): typeof templ extends TemplateStringsArray ? string | undefined : T {
+  let strings = templ && Array.from(typeof templ === "string" ? [templ] : templ);
 
   // 1. Remove trailing whitespace.
   strings[strings.length - 1] = strings[strings.length - 1].replace(

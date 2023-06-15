@@ -2,7 +2,7 @@ import { z } from "zod";
 import { F } from "ts-toolbelt";
 import { ChatCompletionRequestMessage } from "openai";
 import { Chat } from "./Chat";
-import { user, assistant, system } from "./ChatHelpers";
+import { User, Assistant, System } from "./ChatHelpers";
 import { ExtractArgs, ExtractChatArgs, TypeToZodShape, ReplaceChatArgs } from "./types";
 
 export class ChatBuilder<
@@ -19,32 +19,37 @@ export class ChatBuilder<
     return new ChatBuilder(this.messages) as any;
   }
 
-  user<TUserText extends string>(
+  User<TUserText extends string | undefined>(
     str: TUserText
   ): ChatBuilder<
     [...TMessages, { role: "user"; content: TUserText }],
     F.Narrow<TExpectedInput> & ExtractArgs<TUserText>
   > {
-    return new ChatBuilder([...this.messages, user(str)]) as any;
+    return new ChatBuilder([...this.messages, User(str)]) as any;
   }
 
-  system<TSystemText extends string>(
+  System<TSystemText extends string | undefined>(
     str: TSystemText
   ): ChatBuilder<
     [...TMessages, { role: "system"; content: TSystemText }],
     F.Narrow<TExpectedInput> & ExtractArgs<TSystemText>
   > {
-    return new ChatBuilder([...this.messages, system(str)]) as any;
+    return new ChatBuilder([...this.messages, System(str)]) as any;
   }
 
-  assistant<TAssistantText extends string>(
+  Assistant<TAssistantText extends string | undefined>(
     str: TAssistantText
   ): ChatBuilder<
     [...TMessages, { role: "assistant"; content: TAssistantText }],
     F.Narrow<TExpectedInput> & ExtractArgs<TAssistantText>
   > {
-    return new ChatBuilder([...this.messages, assistant(str)]) as any;
+    return new ChatBuilder([...this.messages, Assistant(str)]) as any;
   }
+
+  // legacy purposes
+  assistant = this.Assistant;
+  user = this.User;
+  system = this.System;
 
   addZodInputValidation<TShape extends TExpectedInput>(
     shape: TypeToZodShape<TShape>

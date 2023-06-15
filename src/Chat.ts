@@ -15,7 +15,7 @@ export class Chat<
   ) {}
 
   toArray() {
-    return (this.messages as any[]).map((m: ChatCompletionRequestMessage) => ({
+    return (this.messages as TMessages).map((m) => ({
       role: m.role,
       content: new PromptBuilder(m.content)
         .addInputValidation<ExtractArgs<typeof m.content, typeof this.args>>()
