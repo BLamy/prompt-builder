@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { F } from "ts-toolbelt";
-import { ChatCompletionRequestMessage } from "openai";
+import OpenAI from "openai";
 import { Chat } from "./Chat";
 import { User, Assistant, System } from "./ChatHelpers";
 import { ExtractArgs, ExtractChatArgs, TypeToZodShape, ReplaceChatArgs } from "./types";
@@ -8,7 +8,7 @@ import { ExtractArgs, ExtractChatArgs, TypeToZodShape, ReplaceChatArgs } from ".
 export class ChatBuilder<
   TMessages extends
     | []
-    | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
+    | [...OpenAI.Chat.CreateChatCompletionRequestMessage[], OpenAI.Chat.CreateChatCompletionRequestMessage],
   TExpectedInput extends ExtractChatArgs<TMessages, any>
 > {
   constructor(public messages: TMessages) {}
@@ -19,7 +19,7 @@ export class ChatBuilder<
     return new ChatBuilder(this.messages) as any;
   }
 
-  User<TUserText extends string | undefined>(
+  User<TUserText extends string | null>(
     str: TUserText
   ): ChatBuilder<
     [...TMessages, { role: "user"; content: TUserText }],
@@ -28,7 +28,7 @@ export class ChatBuilder<
     return new ChatBuilder([...this.messages, User(str)]) as any;
   }
 
-  System<TSystemText extends string | undefined>(
+  System<TSystemText extends string | null>(
     str: TSystemText
   ): ChatBuilder<
     [...TMessages, { role: "system"; content: TSystemText }],
@@ -37,7 +37,7 @@ export class ChatBuilder<
     return new ChatBuilder([...this.messages, System(str)]) as any;
   }
 
-  Assistant<TAssistantText extends string | undefined>(
+  Assistant<TAssistantText extends string | null>(
     str: TAssistantText
   ): ChatBuilder<
     [...TMessages, { role: "assistant"; content: TAssistantText }],
