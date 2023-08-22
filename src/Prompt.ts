@@ -2,7 +2,7 @@ import { F } from "ts-toolbelt";
 import { ExtractArgs, ReplaceArgs } from "./types";
 
 export class Prompt<
-  TPromptTemplate extends string | undefined,
+  TPromptTemplate extends string | null,
   TSuppliedInputArgs extends ExtractArgs<TPromptTemplate, {}>
 > {
   constructor(

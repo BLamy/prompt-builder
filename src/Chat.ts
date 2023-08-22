@@ -1,12 +1,12 @@
 import { F } from "ts-toolbelt";
-import { ChatCompletionRequestMessage } from "openai";
+import OpenAI from "openai";
 import { PromptBuilder } from "./PromptBuilder";
 import { ExtractArgs, ExtractChatArgs, ReplaceChatArgs } from "./types";
 
 export class Chat<
   TMessages extends
     | []
-    | [...ChatCompletionRequestMessage[], ChatCompletionRequestMessage],
+    | [...OpenAI.Chat.CreateChatCompletionRequestMessage[], OpenAI.Chat.CreateChatCompletionRequestMessage],
   TSuppliedInputArgs extends ExtractChatArgs<TMessages, {}>
 > {
   constructor(

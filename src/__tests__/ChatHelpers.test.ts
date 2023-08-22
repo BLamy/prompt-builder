@@ -20,7 +20,7 @@ describe("dedent", () => {
             foo
             bar
         `;
-    type test = Expect<Equal<typeof dedented, string | undefined>>;
+    type test = Expect<Equal<typeof dedented, string | null>>;
     expect(dedented).toBe("foo\nbar");
   });
 
@@ -57,7 +57,7 @@ describe("Message Creation Helpers", () => {
             bar
         `;
     type test = Expect<
-      Equal<typeof systemMessage, { role: "system"; content: string | undefined }>
+      Equal<typeof systemMessage, { role: "system"; content: string | null }>
     >;
     expect(systemMessage).toEqual({ role: "system", content: "foo\nbar" });
   });
@@ -85,7 +85,7 @@ describe("Message Creation Helpers", () => {
             bar
         `;
     type test = Expect<
-      Equal<typeof userMessage, { role: "user"; content: string | undefined }>
+      Equal<typeof userMessage, { role: "user"; content: string | null }>
     >;
     expect(userMessage).toEqual({ role: "user", content: "foo\nbar" });
   });
@@ -116,7 +116,7 @@ describe("Message Creation Helpers", () => {
             bar
         `;
     type test = Expect<
-      Equal<typeof assistantMessage, { role: "assistant"; content: string | undefined }>
+      Equal<typeof assistantMessage, { role: "assistant"; content: string | null }>
     >;
     expect(assistantMessage).toEqual({
       role: "assistant",
