@@ -1,9 +1,12 @@
 {
   "name": "prompt-builder",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepublish": "rm -rf dist && tsc",
     "prettier": "npx prettier --write src",
