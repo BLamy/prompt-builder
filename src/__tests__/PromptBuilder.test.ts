@@ -22,7 +22,7 @@ describe("PromptBuilder", () => {
 
   it("should be able to build a prompt with multiple args of different types", () => {
     const promptBuilder = new PromptBuilder(
-      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"
+      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke",
     );
     const prompt = promptBuilder.build({
       jokeType: "funny",
@@ -55,7 +55,7 @@ describe("PromptBuilder with input validation", () => {
 
   it("should be able to build a prompt with multiple args of different types", () => {
     const promptBuilder = new PromptBuilder(
-      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"
+      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke",
     );
     const validatedPromptBuilder = promptBuilder.addInputValidation<{
       jokeType: "funny" | "silly";
@@ -66,7 +66,7 @@ describe("PromptBuilder with input validation", () => {
     const prompt = validatedPromptBuilder.build({
       jokeType: "funny",
       me: "Brett",
-      num: 1,
+      num: 1 as const,
       bool: true,
     });
     type test = Expect<Equal<typeof prompt, "Tell Brett 1 funny true joke">>;
@@ -99,7 +99,7 @@ describe("PromptBuilder with input validation using Zod", () => {
           typeof promptType,
           "Tell me a funny joke" | "Tell me a silly joke"
         >
-      >
+      >,
     ];
     assert.strictEqual(prompt, "Tell me a funny joke");
     assert.strictEqual(promptType, "Tell me a {{jokeType}} joke");
@@ -117,22 +117,21 @@ describe("PromptBuilder with input validation using Zod", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, {
           jokeType: "Invalid input",
         });
         return true;
-      }
+      },
     );
   });
 
   it("should be able to build a prompt with multiple args of different types", () => {
     const promptBuilder = new PromptBuilder(
-      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"
+      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke",
     );
     const bar = promptBuilder.type;
-    //      ^?
 
     const tsValidatedPromptBuilder = promptBuilder.addInputValidation<{
       jokeType: "funny" | "silly";
@@ -141,7 +140,6 @@ describe("PromptBuilder with input validation using Zod", () => {
       bool: boolean;
     }>();
     const asdf = tsValidatedPromptBuilder.type;
-    //      ^?
 
     const validatedPromptBuilder = promptBuilder.addZodInputValidation({
       jokeType: z.union([z.literal("funny"), z.literal("silly")]),
@@ -150,13 +148,13 @@ describe("PromptBuilder with input validation using Zod", () => {
       bool: z.boolean(),
     });
     const foo = validatedPromptBuilder.type;
-    // ^?
+
     type asdfasdf = Expect<Equal<typeof foo, typeof asdf>>;
 
     const prompt = validatedPromptBuilder.build({
       jokeType: "funny",
       me: "Brett",
-      num: 1,
+      num: 1 as const,
       bool: true,
     });
     type tests = Expect<Equal<typeof prompt, "Tell Brett 1 funny true joke">>;
@@ -180,7 +178,7 @@ describe("PromptBuilder with input validation using Zod", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, {
           bool: "Expected boolean, received string",
@@ -189,7 +187,7 @@ describe("PromptBuilder with input validation using Zod", () => {
           num: "Expected number, received string",
         });
         return true;
-      }
+      },
     );
   });
 
@@ -225,7 +223,7 @@ describe("PromptBuilder with input validation using Zod", () => {
 
   it("validate props should fail if invalid args provided", () => {
     const validatedPromptBuilder = new PromptBuilder(
-      "Tell me a {{jokeType}} joke"
+      "Tell me a {{jokeType}} joke",
     ).addZodInputValidation({
       jokeType: z.union([z.literal("funny"), z.literal("dad")]),
     });
@@ -245,11 +243,11 @@ describe("PromptBuilder with input validation using Zod", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, { jokeType: "Invalid input" });
         return true;
-      }
+      },
     );
 
     if (validatedPromptBuilder.validate(args)) {
@@ -268,21 +266,23 @@ describe("PromptBuilder with input validation using Zod", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, { jokeType: "Invalid input" });
         return true;
-      }
+      },
     );
   });
 
   it("tsvalidated should have same loose type as zod validated", () => {
     const promptBuilder = new PromptBuilder(
-      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"
+      "Tell {{me}} {{num}} {{jokeType}} {{bool}} joke",
     );
     type BasicType = typeof promptBuilder.type;
-    //      ^?
-    type BasicTest = Expect<Equal<BasicType, `Tell ${any} ${any} ${any} ${any} joke`>>;
+
+    type BasicTest = Expect<
+      Equal<BasicType, `Tell ${any} ${any} ${any} ${any} joke`>
+    >;
 
     const tsValidatedPromptBuilder = promptBuilder.addInputValidation<{
       jokeType: "funny" | "silly";
@@ -291,7 +291,6 @@ describe("PromptBuilder with input validation using Zod", () => {
       bool: boolean;
     }>();
     type TSValidatedType = typeof tsValidatedPromptBuilder.type;
-    //      ^?
 
     const validatedPromptBuilder = promptBuilder.addZodInputValidation({
       jokeType: z.union([z.literal("funny"), z.literal("silly")]),
@@ -300,39 +299,42 @@ describe("PromptBuilder with input validation using Zod", () => {
       bool: z.boolean(),
     });
     type ZodValidatedType = typeof validatedPromptBuilder.type;
-    //     ^?
+
     type asdfasdf = Expect<Equal<TSValidatedType, ZodValidatedType>>;
   });
 
   test("Can write a function that accepts the type of a PromptBuilder then accepts any output from that builder", () => {
-    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke.").addInputValidation<{
-      jokeType: "funny" | "silly"
+    const promptBuilder = new PromptBuilder(
+      "Tell me a {{jokeType}} joke.",
+    ).addInputValidation<{
+      jokeType: "funny" | "silly";
     }>();
     function exampleFunction(input: typeof promptBuilder.type) {}
 
     exampleFunction(promptBuilder.build({ jokeType: "funny" }));
-    exampleFunction("Tell me a funny joke.")
+    exampleFunction("Tell me a funny joke.");
     exampleFunction(promptBuilder.build({ jokeType: "silly" }));
-    exampleFunction("Tell me a silly joke.")
+    exampleFunction("Tell me a silly joke.");
     // @ts-expect-error
     exampleFunction(promptBuilder.build({ jokeType: "bad" }));
     // @ts-expect-error
-    exampleFunction("Tell me a bad joke.")
-  })
-
+    exampleFunction("Tell me a bad joke.");
+  });
 
   test("Can write a function that accepts the type of a PromptBuilder then accepts any output from that builder", () => {
-    const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke.").addZodInputValidation({
+    const promptBuilder = new PromptBuilder(
+      "Tell me a {{jokeType}} joke.",
+    ).addZodInputValidation({
       jokeType: z.union([z.literal("funny"), z.literal("silly")]),
     });
     function exampleFunction(input: typeof promptBuilder.type) {}
 
     exampleFunction(promptBuilder.build({ jokeType: "funny" }));
-    exampleFunction("Tell me a funny joke.")
+    exampleFunction("Tell me a funny joke.");
     exampleFunction(promptBuilder.build({ jokeType: "silly" }));
-    exampleFunction("Tell me a silly joke.")
+    exampleFunction("Tell me a silly joke.");
     // @ts-expect-error
-    exampleFunction("Tell me a bad joke.")
+    exampleFunction("Tell me a bad joke.");
     assert.throws(
       () => {
         // @ts-expect-error
@@ -344,11 +346,11 @@ describe("PromptBuilder with input validation using Zod", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, { jokeType: "Invalid input" });
         return true;
-      }
+      },
     );
-  })
+  });
 });

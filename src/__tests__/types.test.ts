@@ -9,7 +9,7 @@ import {
 
 export type Expect<T extends true> = T;
 export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
-  T
+  T,
 >() => T extends Y ? 1 : 2
   ? true
   : false;
@@ -45,7 +45,7 @@ type testReplaceArgs = [
       >,
       "Tell me a funny poem"
     >
-  >
+  >,
 ];
 
 type testExtractArgsAsTuple = [
@@ -63,13 +63,13 @@ type testExtractArgsAsTuple = [
       ExtractArgsAsTuple<"Tell me a {{jokeType}} {{joke}}">,
       ["jokeType", "joke"]
     >
-  >
+  >,
 ];
 type fadsfsa = ExtractArgs<
   "Tell {{person}} a {{jokeType}} joke",
   { jokeType: number }
 >;
-//      ^?
+
 type foo = ExtractArgs<
   "Tell {{person}} a {{jokeType}} joke",
   {
@@ -105,7 +105,7 @@ type testExtractArgs = [
       >,
       { jokeType: string; num: number; joke: string }
     >
-  >
+  >,
 ];
 
 type testExtractChatArgs = [
@@ -113,9 +113,8 @@ type testExtractChatArgs = [
     Equal<
       ExtractChatArgs<
         [
-          //    ^?
           { role: "system"; content: "foo {{bar}} test" },
-          { role: "user"; content: "foo {{buzz}} test" }
+          { role: "user"; content: "foo {{buzz}} test" },
         ]
       >,
       {
@@ -128,9 +127,8 @@ type testExtractChatArgs = [
     Equal<
       ExtractChatArgs<
         [
-          //    ^?
           { role: "system"; content: "foo {{bar}} test" },
-          { role: "user"; content: "foo {{buzz}} test" }
+          { role: "user"; content: "foo {{buzz}} test" },
         ],
         {
           bar: "fizz" | "buzz";
@@ -147,9 +145,8 @@ type testExtractChatArgs = [
     Equal<
       ExtractChatArgs<
         [
-          //    ^?
           { role: "system"; content: "foo {{bar}} test" },
-          { role: "user"; content: "foo {{buzz}} test" }
+          { role: "user"; content: "foo {{buzz}} test" },
         ],
         {
           bar: "fizz" | "buzz";
@@ -160,7 +157,7 @@ type testExtractChatArgs = [
         buzz: any;
       }
     >
-  >
+  >,
 ];
 
 type testReplaceChatArgs = [
@@ -196,7 +193,7 @@ type testReplaceChatArgs = [
       ReplaceChatArgs<
         [
           { role: "system"; content: "foo {{bar}} test" },
-          { role: "user"; content: "foo {{buzz}} test" }
+          { role: "user"; content: "foo {{buzz}} test" },
         ],
         {
           bar: "test";
@@ -205,10 +202,10 @@ type testReplaceChatArgs = [
       >,
       [
         { role: "system"; content: "foo test test" },
-        { role: "user"; content: "foo test2 test" | "foo test3 test" }
+        { role: "user"; content: "foo test2 test" | "foo test3 test" },
       ]
     >
-  >
+  >,
 ];
 
 // Required to have atleast 1 test

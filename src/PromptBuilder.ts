@@ -1,22 +1,21 @@
 import { z } from "zod";
-import { F } from "ts-toolbelt";
 import { Prompt } from "./Prompt";
 import { ExtractArgs, ReplaceArgs, TypeToZodShape } from "./types";
 
 export class PromptBuilder<
   TPromptTemplate extends string | null,
-  TExpectedInput extends ExtractArgs<TPromptTemplate, {}>
+  const TExpectedInput extends ExtractArgs<TPromptTemplate, {}>,
 > {
   constructor(public template: TPromptTemplate) {}
 
   addInputValidation<
-    TSTypeValidator extends ExtractArgs<TPromptTemplate, TSTypeValidator>
+    TSTypeValidator extends ExtractArgs<TPromptTemplate, TSTypeValidator>,
   >(): PromptBuilder<TPromptTemplate, TSTypeValidator> {
     return new PromptBuilder(this.template) as any;
   }
 
   addZodInputValidation<TShape extends TExpectedInput>(
-    shape: TypeToZodShape<TShape>
+    shape: TypeToZodShape<TShape>,
   ) {
     const zodValidator = z.object(shape as any);
     return new (class extends PromptBuilder<TPromptTemplate, TShape> {
@@ -28,9 +27,7 @@ export class PromptBuilder<
         return this.template as ReplaceArgs<TPromptTemplate, TShape>;
       }
 
-      build<TSuppliedInputArgs extends TShape>(
-        args: F.Narrow<TSuppliedInputArgs>
-      ) {
+      build<TSuppliedInputArgs extends TShape>(args: TSuppliedInputArgs) {
         zodValidator.parse(args);
         return new Prompt(this.template, args).toString();
       }
@@ -46,9 +43,7 @@ export class PromptBuilder<
     return this.template as ReplaceArgs<TPromptTemplate, TExpectedInput>;
   }
 
-  build<TSuppliedInputArgs extends TExpectedInput>(
-    args: F.Narrow<TSuppliedInputArgs>
-  ) {
+  build<TSuppliedInputArgs extends TExpectedInput>(args: TSuppliedInputArgs) {
     return new Prompt(this.template, args).toString();
   }
 }

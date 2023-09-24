@@ -47,12 +47,13 @@ export function dedent<T extends string | null>(
   templ: TemplateStringsArray | T,
   ...values: unknown[]
 ): typeof templ extends TemplateStringsArray ? string | null : T {
-  let strings = templ && Array.from(typeof templ === "string" ? [templ] : templ);
+  let strings =
+    templ && Array.from(typeof templ === "string" ? [templ] : templ);
 
   // 1. Remove trailing whitespace.
   strings[strings.length - 1] = strings[strings.length - 1].replace(
     /\r?\n([\t ]*)$/,
-    ""
+    "",
   );
 
   // 2. Find all line breaks to determine the highest common indentation level.
@@ -60,7 +61,7 @@ export function dedent<T extends string | null>(
     const matches = str.match(/\n([\t ]+|(?!\s).)/g);
     if (matches) {
       return arr.concat(
-        matches.map((match) => match.match(/[\t ]/g)?.length ?? 0)
+        matches.map((match) => match.match(/[\t ]/g)?.length ?? 0),
       );
     }
     return arr;

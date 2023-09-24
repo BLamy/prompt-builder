@@ -7,7 +7,7 @@ describe("Basic Prompt", () => {
     const prompt = new Prompt(
       "Tell me a {{jokeType}} joke",
       // @ts-expect-error
-      {}
+      {},
     );
   });
 
@@ -19,7 +19,6 @@ describe("Basic Prompt", () => {
 
   it("should be able to build a prompt", () => {
     const args = Object.freeze({
-      // ^?
       jokeType: "funny",
     });
     const prompt = new Prompt("Tell me a {{jokeType}} joke", args).toString();
@@ -29,16 +28,14 @@ describe("Basic Prompt", () => {
 
   it("should be able to build a prompt with a variable at the end", () => {
     const prompt = new Prompt("This is a {{test}}", {
-      // ^?
       test: "foobar",
-    } as const).toString();
+    }).toString();
     type test = Expect<Equal<typeof prompt, "This is a foobar">>;
     assert.strictEqual(prompt, "This is a foobar");
   });
 
   it("should be able to build a prompt with a variable at the beginning", () => {
     const prompt = new Prompt("{{fizzbuzz}} is a test", {
-      // ^?
       fizzbuzz: "foobar" as const,
     }).toString();
     type test = Expect<Equal<typeof prompt, "foobar is a test">>;
@@ -47,11 +44,10 @@ describe("Basic Prompt", () => {
 
   it("should be able to build a prompt with a multiple arguments of different types", () => {
     const prompt = new Prompt("{{str}}{{num}}{{bool}}", {
-      // ^?
       str: "str",
       num: 2,
       bool: false,
-    } as const).toString();
+    }).toString();
     type test = Expect<Equal<typeof prompt, "str2false">>;
     assert.strictEqual(prompt, "str2false");
   });

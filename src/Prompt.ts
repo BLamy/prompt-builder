@@ -1,13 +1,12 @@
-import { F } from "ts-toolbelt";
 import { ExtractArgs, ReplaceArgs } from "./types";
 
 export class Prompt<
   TPromptTemplate extends string | null,
-  TSuppliedInputArgs extends ExtractArgs<TPromptTemplate, {}>
+  const TSuppliedInputArgs extends ExtractArgs<TPromptTemplate, {}>,
 > {
   constructor(
     public template: TPromptTemplate,
-    public args: F.Narrow<TSuppliedInputArgs>
+    public args: TSuppliedInputArgs,
   ) {}
 
   toString() {

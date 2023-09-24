@@ -6,6 +6,11 @@ This library leverages TypeScript's string literal types to perform compile-time
 
 ## Installation
 
+
+```bash
+bun install prompt-builder
+```
+
 ```bash
 pnpm add prompt-builder
 ```
@@ -33,7 +38,7 @@ const promptBuilder = new PromptBuilder("Tell me a {{jokeType}} joke");
 
 const prompt = promptBuilder.build({
   jokeType: "funny",
-} as const);
+});
 
 console.log(prompt);  // "Tell me a funny joke"
 ```
@@ -47,6 +52,10 @@ https://blamy.gitbook.io/prompt-builder
 ## Running Tests
 
 We have included a suite of tests for validating the functionality of the library. You can run these tests using the following command:
+
+```bash
+bun test:watch
+```
 
 ```bash
 npm run test

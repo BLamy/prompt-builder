@@ -116,7 +116,10 @@ describe("Message Creation Helpers", () => {
             bar
         `;
     type test = Expect<
-      Equal<typeof assistantMessage, { role: "assistant"; content: string | null }>
+      Equal<
+        typeof assistantMessage,
+        { role: "assistant"; content: string | null }
+      >
     >;
     expect(assistantMessage).toEqual({
       role: "assistant",

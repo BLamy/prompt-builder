@@ -7,7 +7,6 @@ import { Equal, Expect } from "./types.test";
 describe("ChatBuilder", () => {
   it("invalid args should throw an error", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       user("Tell me a {{jokeType}} joke"),
       // @ts-expect-error
     ]).build({});
@@ -15,14 +14,13 @@ describe("ChatBuilder", () => {
 
   it("should allow empty array", () => {
     const chatBuilder = new ChatBuilder([]).build({});
-    //     ^?
+
     type test = Expect<Equal<typeof chatBuilder, []>>;
     assert.deepEqual(chatBuilder, []);
   });
 
   it("should allow chainging of chat helpers", () => {
     const chatBuilder = new ChatBuilder([])
-      //     ^?
       .user(`Tell me a {{jokeType}} joke`)
       .assistant(`{{var2}} joke?`)
       .system(`joke? {{var3}}`)
@@ -30,7 +28,7 @@ describe("ChatBuilder", () => {
         jokeType: "funny",
         var2: "foo",
         var3: "bar",
-      } as const);
+      });
     const expectedContent = "Tell me a funny joke";
     const expectedContent2 = "foo joke?";
     const expectedContent3 = "joke? bar";
@@ -40,7 +38,7 @@ describe("ChatBuilder", () => {
         [
           { role: "user"; content: typeof expectedContent },
           { role: "assistant"; content: typeof expectedContent2 },
-          { role: "system"; content: typeof expectedContent3 }
+          { role: "system"; content: typeof expectedContent3 },
         ]
       >
     >;
@@ -52,13 +50,12 @@ describe("ChatBuilder", () => {
   });
   it("should allow regular input validation after chaining", () => {
     const chatBuilder = new ChatBuilder([])
-      //     ^?
+
       .user(`Tell me a {{jokeType}} joke`)
       .addInputValidation<{
         jokeType: "funny" | "silly";
       }>();
     const chat = chatBuilder.build({
-      //     ^?
       jokeType: "funny",
     });
 
@@ -76,14 +73,13 @@ describe("ChatBuilder", () => {
 
   it("should allow adding zod validation after chaining", () => {
     const chatBuilder = new ChatBuilder([])
-      //     ^?
+
       .user(`Tell me a {{jokeType}} joke`)
       .addZodInputValidation({
         jokeType: z.union([z.literal("funny"), z.literal("bad")]),
       });
 
     const chat = chatBuilder.build({
-      //   ^?
       jokeType: "funny",
     });
     const expectedContent = "Tell me a funny joke";
@@ -104,19 +100,18 @@ describe("ChatBuilder", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, {
           jokeType: "Invalid input",
         });
         return true;
-      }
+      },
     );
   });
 
   it("Basic Single message Example", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       user(`Tell me a {{jokeType}} joke`),
     ]).build({
       jokeType: "funny" as const,
@@ -134,12 +129,11 @@ describe("ChatBuilder", () => {
 
   it("Multi argument Example", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       user(`Tell {{me}} {{num}} Jokes.`),
     ]).build({
       num: 1,
       me: "Brett",
-    } as const);
+    });
 
     const expectedContent = "Tell Brett 1 Jokes.";
     type test = Expect<
@@ -153,7 +147,6 @@ describe("ChatBuilder", () => {
 
   it("Multi message Example", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell {{me}} {{num}} Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
@@ -161,7 +154,7 @@ describe("ChatBuilder", () => {
       jokeType: "funny",
       num: 1,
       me: "Brett",
-    } as const);
+    });
 
     const expectedSystemContent =
       "You are a joke generator you only tell funny jokes";
@@ -174,7 +167,7 @@ describe("ChatBuilder", () => {
         [
           { role: "system"; content: typeof expectedSystemContent },
           { role: "user"; content: typeof expectedUserContent },
-          { role: "assistant"; content: typeof expectedAssistantContent }
+          { role: "assistant"; content: typeof expectedAssistantContent },
         ]
       >
     >;
@@ -187,7 +180,6 @@ describe("ChatBuilder", () => {
 
   it("Multi message Example with zod validation", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell {{me}} {{num}} Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
@@ -201,7 +193,7 @@ describe("ChatBuilder", () => {
       jokeType: "funny",
       num: 1,
       me: "Brett",
-    } as const);
+    });
 
     const expectedSystemContent =
       "You are a joke generator you only tell funny jokes";
@@ -214,7 +206,7 @@ describe("ChatBuilder", () => {
         [
           { role: "system"; content: typeof expectedSystemContent },
           { role: "user"; content: typeof expectedUserContent },
-          { role: "assistant"; content: typeof expectedAssistantContent }
+          { role: "assistant"; content: typeof expectedAssistantContent },
         ]
       >
     >;
@@ -240,7 +232,7 @@ describe("ChatBuilder", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, {
           jokeType: "Invalid input",
@@ -248,13 +240,12 @@ describe("ChatBuilder", () => {
           me: "Invalid input",
         });
         return true;
-      }
+      },
     );
   });
 
   it("Multi message Example with input validation", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell {{me}} {{num}} Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
@@ -265,7 +256,6 @@ describe("ChatBuilder", () => {
     }>();
 
     const chat = chatBuilder.build({
-      // ^?
       jokeType: "funny",
       num: 1,
       me: "Brett",
@@ -282,7 +272,7 @@ describe("ChatBuilder", () => {
         [
           { role: "system"; content: typeof expectedSystemContent },
           { role: "user"; content: typeof expectedUserContent },
-          { role: "assistant"; content: typeof expectedAssistantContent }
+          { role: "assistant"; content: typeof expectedAssistantContent },
         ]
       >
     >;
@@ -303,7 +293,6 @@ describe("ChatBuilder", () => {
   });
   it("should be able to validate props for a ZodChatBuilder", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell {{me}} {{num}} Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
@@ -339,7 +328,7 @@ describe("ChatBuilder", () => {
                 | `Tell Brett ${number} Jokes.`
                 | `Tell Liana ${number} Jokes.`;
             },
-            { role: "assistant"; content: "Probably a bad joke a about atoms" }
+            { role: "assistant"; content: "Probably a bad joke a about atoms" },
           ]
         >
       >;
@@ -350,7 +339,6 @@ describe("ChatBuilder", () => {
 
   it("validate props should fail if invalid args provided", () => {
     const chatBuilder = new ChatBuilder([
-      // ^?
       system(`You are a joke generator you only tell {{jokeType}} jokes`),
       user(`Tell Jokes.`),
       assistant(`Probably a bad joke a about atoms`),
@@ -372,7 +360,7 @@ describe("ChatBuilder", () => {
       user("Tell {{me}} {{num}} {{jokeType}} {{bool}} joke"),
     ]);
     type BasicType = typeof chatBuilder.type;
-    //      ^?
+
     type BasicTest = Expect<
       Equal<
         BasicType,
@@ -380,7 +368,7 @@ describe("ChatBuilder", () => {
           {
             role: "user";
             content: `Tell ${any} ${any} ${any} ${any} joke`;
-          }
+          },
         ]
       >
     >;
@@ -392,7 +380,6 @@ describe("ChatBuilder", () => {
       bool: boolean;
     }>();
     type TSValidatedType = typeof tsValidatedChatBuilder.type;
-    //      ^?
 
     const validatedChatBuilder = chatBuilder.addZodInputValidation({
       jokeType: z.union([z.literal("funny"), z.literal("silly")]),
@@ -401,7 +388,7 @@ describe("ChatBuilder", () => {
       bool: z.boolean(),
     });
     type ZodValidatedType = typeof validatedChatBuilder.type;
-    //     ^?
+
     type asdfasdf = Expect<Equal<TSValidatedType, ZodValidatedType>>;
   });
 
@@ -448,11 +435,11 @@ describe("ChatBuilder", () => {
             ...acc,
             [issue.path[0]]: issue.message,
           }),
-          {}
+          {},
         );
         assert.deepEqual(issues, { jokeType: "Invalid input" });
         return true;
-      }
+      },
     );
   });
 });

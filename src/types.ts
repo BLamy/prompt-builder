@@ -3,7 +3,7 @@ import OpenAI from "openai";
 
 export type ReplaceArgs<
   TPromptTemplate extends string | null,
-  TArgs extends Record<string, any>
+  TArgs extends Record<string, any>,
 > = TPromptTemplate extends `${infer TStart}{{${infer TDataType}}}${infer TRest}`
   ? TRest extends `${string}{{${string}}}` | `${string}{{${string}}}${string}`
     ? `${TStart}${TArgs[TDataType]}${ReplaceArgs<TRest, TArgs>}`
@@ -19,7 +19,7 @@ export type ExtractArgsAsTuple<TPromptTemplate extends string | null> =
 
 export type ExtractArgs<
   TPromptTemplate extends string | null,
-  TSTypeValidator = ExtractArgs<TPromptTemplate, {}>
+  TSTypeValidator = ExtractArgs<TPromptTemplate, {}>,
 > = {
   [K in ExtractArgsAsTuple<TPromptTemplate>[number] as K]: K extends keyof TSTypeValidator
     ? TSTypeValidator[K]
@@ -33,7 +33,7 @@ export type TypeToZodShape<T> = [T] extends [string | number | boolean]
     };
 
 export type ReplaceChatArgs<TMessages, TArgs extends Record<string, any>> = {
-  [K in keyof TMessages]: TMessages[K] extends OpenAI.Chat.CreateChatCompletionRequestMessage
+  [K in keyof TMessages]: TMessages[K] extends OpenAI.Chat.ChatCompletionMessageParam
     ? {
         role: TMessages[K]["role"];
         content: ReplaceArgs<TMessages[K]["content"], TArgs>;
@@ -43,9 +43,9 @@ export type ReplaceChatArgs<TMessages, TArgs extends Record<string, any>> = {
 
 export type ExtractChatArgs<
   TMessages,
-  TSTypeValidator = ExtractChatArgs<TMessages, {}>
+  TSTypeValidator = ExtractChatArgs<TMessages, {}>,
 > = ExtractArgs<
-  TMessages extends OpenAI.Chat.CreateChatCompletionRequestMessage[]
+  TMessages extends OpenAI.Chat.ChatCompletionMessageParam[]
     ? TMessages[number]["content"]
     : never,
   TSTypeValidator
