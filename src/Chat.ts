@@ -1,8 +1,10 @@
 import OpenAI from "openai";
 import { PromptBuilder } from "./PromptBuilder";
 import { ExtractArgs, ExtractChatArgs, ReplaceChatArgs } from "./types";
+import { ToolBuilder } from "./ToolBuilder";
 
 export class Chat<
+  ToolNames extends string,
   TMessages extends
     | []
     | [
@@ -14,7 +16,12 @@ export class Chat<
   constructor(
     public messages: TMessages,
     public args: TSuppliedInputArgs,
+    public tools = {} as Record<ToolNames, ToolBuilder>,
+    public mustUseTool: boolean = false
   ) {}
+
+  toJSONSchema() {
+  }
 
   toArray() {
     return this.messages.map((m) => ({
