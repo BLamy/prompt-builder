@@ -1,5 +1,13 @@
 # Roadmap
 
+setTokenLimit - the ability to set a token limit so that built chats are within an expected token limit.
+
+
+
+
+
+
+
 Inspired by [priompt](https://github.com/anysphere/priompt)
 
 
