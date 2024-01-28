@@ -5,3 +5,4 @@
 * [PromptBuilder](promptbuilder.md)
 * [Chat](chat.md)
 * [ChatBuilder](chatbuilder.md)
+* [Roadmap](roadmap.md)
