@@ -2,6 +2,8 @@
 
 setTokenLimit - the ability to set a token limit so that built chats are within an expected token limit.
 
+chatHistory - should be able to be passed into the array to define where chat history will be fed into the prompt
+
 
 
 
