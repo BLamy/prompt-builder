@@ -8,6 +8,7 @@ import {
   TypeToZodShape,
   ReplaceChatArgs,
 } from "./types";
+import { ToolBuilder } from "./ToolBuilder";
 
 export class ChatBuilder<
   TMessages extends
@@ -90,7 +91,7 @@ export class ChatBuilder<
   build<const TSuppliedInputArgs extends TExpectedInput>(
     args: TSuppliedInputArgs,
   ) {
-    return new Chat<TMessages, TSuppliedInputArgs>(
+    return new Chat<"", TMessages, TSuppliedInputArgs>(
       this.messages as any,
       args,
     ).toArray();
